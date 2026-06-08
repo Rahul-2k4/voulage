@@ -124,7 +124,12 @@ build_src_package() {
     deb_build_sign="-us -uc"
   fi
 
-  debuild -S -sa $deb_build_sign
+  local debuild_path_args=()
+  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
+    debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
+  fi
+
+  debuild "${debuild_path_args[@]}" -S -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
@@ -144,7 +149,12 @@ build_bin_package() {
     deb_build_sign="-us -uc"
   fi
 
-  debuild -b -sa $deb_build_sign
+  local debuild_path_args=()
+  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
+    debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
+  fi
+
+  debuild "${debuild_path_args[@]}" -b -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
