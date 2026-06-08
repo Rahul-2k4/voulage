@@ -64,7 +64,7 @@ PACKAGE_REF=""
 DISTRO=""            # ubuntu, debian
 CODENAME=""          # e.g. jammy, noble, bookworm, etc
 STAGE=""             # experimental, unstable, testing, stable
-SUITE="$STAGE"       # experimental, unstable, testing, stable
+SUITE=""             # experimental, unstable, testing, stable
 COMPONENT="main"     # e.g. main, 3_2, 3_1, etc.
 ARCH="amd64"
 
@@ -125,6 +125,7 @@ if [ -z "$STAGE" ]; then
   echo "Error: required value for --suite is missing"
   exit 1
 fi
+SUITE="$STAGE"
 
 #### Get extensions
 
@@ -140,6 +141,9 @@ if [ ! -f "$EXTENSION" ]; then
   exit 1
 fi
 source $EXTENSION
+if declare -F archive_cleanup_scripts >/dev/null; then
+  trap archive_cleanup_scripts EXIT
+fi
 
 #### Setup files
 
