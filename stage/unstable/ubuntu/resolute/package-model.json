@@ -1,5 +1,9 @@
 {
   "packages": {
+    "cosmic-osd": {
+      "ref": "rahul/week6-voulage-rust193-proof",
+      "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
+    },
     "regolith-control-center": {
       "ref": "regolith/49",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
