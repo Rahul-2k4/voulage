@@ -12,8 +12,24 @@ update_changelog() {
   echo "::group::Updating debian/changelog file"
   cd "${PKG_BUILD_PATH:?}/$PACKAGE_NAME"
   version=$(dpkg-parsechangelog --show-field Version)
-  echo -e "\033[0;34mUpdating changlog to ${version}-1regolith-$CODENAME for $CODENAME...\033[0m"
-  dch --force-distribution --distribution "$CODENAME" --newversion "${version}-1regolith-$CODENAME" "Automated Voulage release"
+  case "$version" in
+    *-1-1regolith-*)
+      base_version="${version%-1regolith-*}"
+      ;;
+    *-1regolith-*)
+      base_version="${version%-1regolith-*}-1"
+      ;;
+    *)
+      base_version="$version"
+      ;;
+  esac
+  new_version="${base_version}-1regolith-$CODENAME"
+  echo -e "\033[0;34mUpdating changlog to ${new_version} for $CODENAME...\033[0m"
+  if [ "$new_version" != "$version" ]; then
+    dch --force-distribution --distribution "$CODENAME" --newversion "$new_version" "Automated Voulage release"
+  else
+    echo -e "\033[0;34mVersion already targets $CODENAME; skipping dch.\033[0m"
+  fi
 
   cd - >/dev/null 2>&1 || exit
   echo "::endgroup::"
@@ -253,8 +269,14 @@ archive_setup_scripts() {
   # Following allows for internal dependencies
 
   echo "::group::Setting up archive apt list"
+  if [ "$LOCAL_BUILD" == "true" ]; then
+    echo -e "\033[0;34mSkipping archive apt setup for local build.\033[0m"
+    echo "::endgroup::"
+    return 0
+  fi
+
   rm /tmp/Release || true
-  wget -P /tmp "http://archive.regolith-desktop.com/$DISTRO/$SUITE/dists/$CODENAME/Release" || true
+  wget --timeout=10 --tries=1 -P /tmp "http://archive.regolith-desktop.com/$DISTRO/$SUITE/dists/$CODENAME/Release" || true
 
   if [ -s /tmp/Release ]; then
     rm /tmp/Release
