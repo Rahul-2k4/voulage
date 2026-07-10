@@ -235,32 +235,37 @@ publish() {
   fi
 
   DEB_CONTROL_FILE="$PKG_BUILD_PATH/$PACKAGE_NAME/debian/control"
-  ALL_ARCH="$ARCH,all"
-
   echo -e "\033[0;34mPublishing binary package $debian_package_name into $PKG_PUBLISH_PATH.\033[0m"
 
-  for target_arch in $(echo $ALL_ARCH | sed "s/,/ /g"); do
-    cat "$DEB_CONTROL_FILE" | grep ^Package: | cut -d' ' -f2 | while read -r bin_pkg; do
-      DEB_BIN_PKG_PATH="$(pwd)/${bin_pkg}_${version}_${target_arch}.deb"
-
-      if [ -f "$DEB_BIN_PKG_PATH" ]; then
-        mkdir -p $PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE
-        echo "  Copying ${bin_pkg}_${version}_${target_arch}.deb"
-        cp "$DEB_BIN_PKG_PATH" "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE"
-
-        if [ "$LOCAL_BUILD" == "false" ] && [ "$SUITE" == "stable" ]; then
-          mkdir -p "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT"
-          cd "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT" >/dev/null 2>&1
-          ln "../$SUITE/${bin_pkg}_${version}_${target_arch}.deb" .
-          cd - >/dev/null 2>&1
-        fi
-
-        echo "CHLOG:Published ${bin_pkg}_${version}_${target_arch}.deb in $DISTRO/$CODENAME/$STAGE from $PKG_LINE"
+  awk '/^Package:/ { package = $2 } /^Architecture:/ { print package, $2 }' "$DEB_CONTROL_FILE" |
+    while read -r bin_pkg bin_arch; do
+      if [ "$bin_arch" == "all" ]; then
+        target_arches=all
       else
-        echo -e "\033[0;31m  Package $bin_pkg does not exist for $target_arch.\033[0m"
+        target_arches=$ARCH
       fi
+
+      for target_arch in $target_arches; do
+        DEB_BIN_PKG_PATH="$(pwd)/${bin_pkg}_${version}_${target_arch}.deb"
+
+        if [ -f "$DEB_BIN_PKG_PATH" ]; then
+          mkdir -p $PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE
+          echo "  Copying ${bin_pkg}_${version}_${target_arch}.deb"
+          cp "$DEB_BIN_PKG_PATH" "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE"
+
+          if [ "$LOCAL_BUILD" == "false" ] && [ "$SUITE" == "stable" ]; then
+            mkdir -p "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT"
+            cd "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT" >/dev/null 2>&1
+            ln "../$SUITE/${bin_pkg}_${version}_${target_arch}.deb" .
+            cd - >/dev/null 2>&1
+          fi
+
+          echo "CHLOG:Published ${bin_pkg}_${version}_${target_arch}.deb in $DISTRO/$CODENAME/$STAGE from $PKG_LINE"
+        else
+          echo -e "\033[0;31m  Package $bin_pkg does not exist for $target_arch.\033[0m"
+        fi
+      done
     done
-  done
 
   echo "::endgroup::"
 }
