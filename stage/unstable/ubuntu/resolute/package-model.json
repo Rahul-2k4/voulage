@@ -15,6 +15,14 @@
     "cosmic-idle": {
       "ref": "master",
       "source": "https://github.com/pop-os/cosmic-idle.git"
+    },
+    "cosmic-session": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-session.git"
+    },
+    "cosmic-settings-daemon": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-settings-daemon.git"
     }
   }
 }
