@@ -7,6 +7,10 @@
     "sway-regolith": {
       "ref": "packaging/v1.11-regolith",
       "source": "https://github.com/regolith-linux/sway-regolith.git"
+    },
+    "cosmic-osd": {
+      "ref": "rahul/week6-voulage-rust193-proof",
+      "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
     }
   }
 }
