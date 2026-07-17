@@ -156,7 +156,7 @@ build_src_package() {
 
   local vendor_tar_marker=false
   local metadata_file
-  for metadata_file in debian/rules debian/Makefile Makefile; do
+  for metadata_file in debian/rules debian/Makefile Makefile justfile; do
     if [ -f "$metadata_file" ] && grep -Fq "vendor.tar" "$metadata_file"; then
       vendor_tar_marker=true
       break
