@@ -16,6 +16,30 @@
       "ref": "packaging/v1.10-regolith",
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
+    "cosmic-osd": {
+      "ref": "rahul/week6-voulage-rust193-proof",
+      "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
+    },
+    "cosmic-idle": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-idle.git"
+    },
+    "cosmic-session": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-session.git"
+    },
+    "cosmic-settings-daemon": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-settings-daemon.git"
+    },
+    "cosmic-bg": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-bg.git"
+    },
+    "cosmic-settings": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-settings"
+    },
     "ubiquity-slideshow-regolith": null
   }
 }
