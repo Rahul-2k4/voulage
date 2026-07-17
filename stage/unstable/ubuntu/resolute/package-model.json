@@ -23,6 +23,14 @@
     "cosmic-settings-daemon": {
       "ref": "master",
       "source": "https://github.com/pop-os/cosmic-settings-daemon.git"
+    },
+    "cosmic-bg": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-bg.git"
+    },
+    "cosmic-settings": {
+      "ref": "master",
+      "source": "https://github.com/pop-os/cosmic-settings"
     }
   }
 }
