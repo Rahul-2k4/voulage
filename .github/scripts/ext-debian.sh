@@ -154,6 +154,17 @@ build_src_package() {
     debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
   fi
 
+  if grep -Fq "vendor.tar" debian/rules; then
+    mkdir -p debian/source
+    local include_binaries_tmp
+    include_binaries_tmp=$(mktemp debian/source/include-binaries.XXXXXX)
+    if [ -f debian/source/include-binaries ]; then
+      grep -Fvx "vendor.tar" debian/source/include-binaries > "$include_binaries_tmp" || true
+    fi
+    printf "%s\n" "vendor.tar" >> "$include_binaries_tmp"
+    mv "$include_binaries_tmp" debian/source/include-binaries
+  fi
+
   debuild "${debuild_path_args[@]}" -S -sa $deb_build_sign
 
   popd
