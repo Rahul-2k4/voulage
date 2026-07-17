@@ -21,8 +21,8 @@
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
-      "ref": "master",
-      "source": "https://github.com/pop-os/cosmic-settings-daemon.git"
+      "ref": "rahul/cosmic-settings-daemon-optional-themes",
+      "source": "https://github.com/Rahul-2k4/cosmic-settings-daemon.git"
     },
     "cosmic-bg": {
       "ref": "master",
