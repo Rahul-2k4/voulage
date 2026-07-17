@@ -172,6 +172,15 @@ build_src_package() {
     fi
     printf "%s\n" "vendor.tar" >> "$include_binaries_tmp"
     mv "$include_binaries_tmp" debian/source/include-binaries
+
+    local source_options_tmp
+    source_options_tmp=$(mktemp debian/source/options.XXXXXX)
+    if [ -f debian/source/options ]; then
+      grep -Fvx -e "--extend-diff-ignore=^\\.cargo/config.toml$" -e "--extend-diff-ignore=^\\.cargo/config$" debian/source/options > "$source_options_tmp" || true
+    fi
+    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config.toml$" >> "$source_options_tmp"
+    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config$" >> "$source_options_tmp"
+    mv "$source_options_tmp" debian/source/options
   fi
 
   debuild "${debuild_path_args[@]}" -S -sa $deb_build_sign
