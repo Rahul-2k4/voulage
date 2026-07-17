@@ -12,15 +12,24 @@ update_changelog() {
   echo "::group::Updating debian/changelog file"
   cd "${PKG_BUILD_PATH:?}/$PACKAGE_NAME"
   version=$(dpkg-parsechangelog --show-field Version)
+  source_format="debian/source/format"
+  if [ -f "$source_format" ] && grep -Fqx "3.0 (native)" "$source_format"; then
+    printf "%s\n" "3.0 (quilt)" > "$source_format"
+  fi
   case "$version" in
-    *-1-1regolith-*)
-      base_version="${version%-1regolith-*}"
-      ;;
     *-1regolith-*)
-      base_version="${version%-1regolith-*}-1"
+      if [[ "$version" =~ ^(.+)-([0-9]+)-1regolith-.+$ ]]; then
+        base_version="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+      else
+        base_version="${version%-1regolith-*}-1"
+      fi
       ;;
     *)
-      base_version="$version"
+      if [[ "$version" =~ ^.+-[0-9]+$ ]]; then
+        base_version="$version"
+      else
+        base_version="${version}-1"
+      fi
       ;;
   esac
   new_version="${base_version}-1regolith-$CODENAME"
