@@ -154,7 +154,16 @@ build_src_package() {
     debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
   fi
 
-  if grep -Fq "vendor.tar" debian/rules; then
+  local vendor_tar_marker=false
+  local metadata_file
+  for metadata_file in debian/rules debian/Makefile Makefile; do
+    if [ -f "$metadata_file" ] && grep -Fq "vendor.tar" "$metadata_file"; then
+      vendor_tar_marker=true
+      break
+    fi
+  done
+
+  if [ "$vendor_tar_marker" == "true" ]; then
     mkdir -p debian/source
     local include_binaries_tmp
     include_binaries_tmp=$(mktemp debian/source/include-binaries.XXXXXX)
