@@ -4,6 +4,10 @@
       "ref": "regolith/49",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
+    "regolith-session": {
+      "ref": "c87640b5f2d4d050bf8366d3c5cb5c9fac81704c",
+      "source": "https://github.com/Rahul-2k4/regolith-session.git"
+    },
     "sway-regolith": {
       "ref": "packaging/v1.11-regolith",
       "source": "https://github.com/regolith-linux/sway-regolith.git"

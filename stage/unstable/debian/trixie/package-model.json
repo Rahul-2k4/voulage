@@ -8,6 +8,10 @@
       "ref": "regolith/48",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
+    "regolith-session": {
+      "ref": "c87640b5f2d4d050bf8366d3c5cb5c9fac81704c",
+      "source": "https://github.com/Rahul-2k4/regolith-session.git"
+    },
     "regolith-debootstick-setup": {
       "ref": "main",
       "source": "https://github.com/regolith-linux/regolith-debootstick-setup.git"
