@@ -9,7 +9,7 @@
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-inputd": {
-      "ref": "d758ef73a071a6feb07cfd7655123e358f492414",
+      "ref": "98f6932a835c722f4eaa0665b787a050afa939f3",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-wm-config": {
@@ -33,7 +33,7 @@
       "source": "https://github.com/pop-os/cosmic-idle.git"
     },
     "cosmic-session": {
-      "ref": "230b601ef189890350eb383ee85fd5343637247b",
+      "ref": "943ec0f4c6542726a16772b52e93591d4c63ca90",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
