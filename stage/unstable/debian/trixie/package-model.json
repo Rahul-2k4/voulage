@@ -8,6 +8,18 @@
       "ref": "regolith/48",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
+    "regolith-displayd": {
+      "ref": "ae505b287a5bcf9ec91f7145dbdfd8ff5460e502",
+      "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
+    },
+    "regolith-inputd": {
+      "ref": "291d4a75ca1ecd353a9929fd22c39b8acb9118dd",
+      "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
+    },
+    "regolith-wm-config": {
+      "ref": "f7120d9007f4f0de0ff668475843a872507bcb16",
+      "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
+    },
     "regolith-session": {
       "ref": "c87640b5f2d4d050bf8366d3c5cb5c9fac81704c",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
