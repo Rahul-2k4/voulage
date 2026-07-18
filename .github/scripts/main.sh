@@ -15,7 +15,16 @@ handle_package() {
   fi
 
   # Get git hash
-  local COMMIT_HASH=$(git ls-remote $lookup_ref $PACKAGE_SOURCE_URL $PACKAGE_SOURCE_REF | awk '{ print $1}')
+  local COMMIT_HASH
+  if [[ "$PACKAGE_SOURCE_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
+    if ! git ls-remote "$PACKAGE_SOURCE_URL" | awk -v sha="$PACKAGE_SOURCE_REF" '$1 == sha { found = 1 } END { exit !found }'; then
+      echo "Error: SHA $PACKAGE_SOURCE_REF was not found at source URL $PACKAGE_SOURCE_URL" >&2
+      return 1
+    fi
+    COMMIT_HASH="$PACKAGE_SOURCE_REF"
+  else
+    COMMIT_HASH=$(git ls-remote "$lookup_ref" "$PACKAGE_SOURCE_URL" "$PACKAGE_SOURCE_REF" | awk '{ print $1}')
+  fi
 
   echo "$PACKAGE_NAME $PACKAGE_SOURCE_URL $PACKAGE_SOURCE_REF $COMMIT_HASH" >> "$NEXT_MANIFEST_FILE"
 

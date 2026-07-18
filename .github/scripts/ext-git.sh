@@ -25,7 +25,14 @@ checkout() {
   fi
 
   cd "$PKG_BUILD_PATH" || exit
-  git clone --recursive "$PACKAGE_URL" -b "$PACKAGE_REF" "$PACKAGE_NAME"
+  if [[ "$PACKAGE_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
+    git clone "$PACKAGE_URL" "$PACKAGE_NAME"
+    cd "$PACKAGE_NAME" || exit
+    git checkout --detach "$PACKAGE_REF"
+    git submodule update --init --recursive
+  else
+    git clone --recursive "$PACKAGE_URL" -b "$PACKAGE_REF" "$PACKAGE_NAME"
+  fi
 
   cd - >/dev/null 2>&1 || exit
   echo "::endgroup::"

@@ -17,27 +17,27 @@
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
     "cosmic-osd": {
-      "ref": "rahul/week6-voulage-rust193-proof",
+      "ref": "5441fecabc90e4112c1563c7749ebeaf7f130c00",
       "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
     },
     "cosmic-idle": {
-      "ref": "master",
+      "ref": "c95d066b5b640509a6369634b669ca60dc50e168",
       "source": "https://github.com/pop-os/cosmic-idle.git"
     },
     "cosmic-session": {
-      "ref": "rahul/regolith-cosmic-session-sway-mode",
+      "ref": "230b601ef189890350eb383ee85fd5343637247b",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
-      "ref": "rahul/cosmic-settings-daemon-optional-themes",
+      "ref": "7c02682178d18b286a0e66a92ca9eb87b0e960e7",
       "source": "https://github.com/Rahul-2k4/cosmic-settings-daemon.git"
     },
     "cosmic-bg": {
-      "ref": "master",
+      "ref": "ed65f7d3dc9e3d4af3cd65244a966e01bff0f730",
       "source": "https://github.com/pop-os/cosmic-bg.git"
     },
     "cosmic-settings": {
-      "ref": "master",
+      "ref": "ab5dd5f43a3655dc99c6991dfbe0684866356a13",
       "source": "https://github.com/pop-os/cosmic-settings"
     },
     "ubiquity-slideshow-regolith": null
