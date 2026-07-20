@@ -56,6 +56,62 @@
       "ref": "ab5dd5f43a3655dc99c6991dfbe0684866356a13",
       "source": "https://github.com/pop-os/cosmic-settings"
     },
-    "ubiquity-slideshow-regolith": null
+    "ubiquity-slideshow-regolith": null,
+    "cosmic-app-library": {
+      "ref": "ce33b9e1ccbebc2108eddee405a485cb92cb83e3",
+      "source": "https://github.com/pop-os/cosmic-app-library.git"
+    },
+    "cosmic-applets": {
+      "ref": "e544cb54c242fecbe9399fcb3dd61d9ac19e1214",
+      "source": "https://github.com/pop-os/cosmic-applets.git"
+    },
+    "cosmic-comp": {
+      "ref": "dec1ee863368737c6900e1ae75424813e27e24af",
+      "source": "https://github.com/pop-os/cosmic-comp.git"
+    },
+    "cosmic-files": {
+      "ref": "5278c67957be14a47aa94e3e69b9765040360211",
+      "source": "https://github.com/pop-os/cosmic-files.git"
+    },
+    "cosmic-greeter": {
+      "ref": "2290aae5e2e078a1d79c6ec1a27cdf3ccc366a45",
+      "source": "https://github.com/pop-os/cosmic-greeter.git"
+    },
+    "cosmic-icons": {
+      "ref": "b78b059636ed967ad7c6f120709c7d29b2bafac1",
+      "source": "https://github.com/pop-os/cosmic-icons.git"
+    },
+    "cosmic-launcher": {
+      "ref": "61ab43a71a0e684a76b0f7a40199c585862148a8",
+      "source": "https://github.com/pop-os/cosmic-launcher.git"
+    },
+    "cosmic-notifications": {
+      "ref": "7c723b7705ec77b1ad5396a1baa9ae1c0cb5a0da",
+      "source": "https://github.com/pop-os/cosmic-notifications.git"
+    },
+    "cosmic-panel": {
+      "ref": "db97fd5974702a966cfaf9bd342ab7a4c80f55fa",
+      "source": "https://github.com/pop-os/cosmic-panel.git"
+    },
+    "cosmic-randr": {
+      "ref": "6e8e795970fa06d434af22775e415b517f7552d3",
+      "source": "https://github.com/pop-os/cosmic-randr.git"
+    },
+    "cosmic-screenshot": {
+      "ref": "d6ef210e981d045fec5022416b85edd0afc03e16",
+      "source": "https://github.com/pop-os/cosmic-screenshot.git"
+    },
+    "xdg-desktop-portal-cosmic": {
+      "ref": "151120e67d532e33e2721319c683a73947be393c",
+      "source": "https://github.com/pop-os/xdg-desktop-portal-cosmic.git"
+    },
+    "cosmic-workspaces": {
+      "ref": "6d90fb4f453b5ad68ba94fdf534d66085a7e4f52",
+      "source": "https://github.com/pop-os/cosmic-workspaces.git"
+    },
+    "pop-fonts": {
+      "ref": "2da23d5e76bf724c49875e8fd328e1fd5a6de80e",
+      "source": "https://github.com/pop-os/fonts.git"
+    }
   }
 }
