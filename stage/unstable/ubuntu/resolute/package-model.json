@@ -33,7 +33,7 @@
       "source": "https://github.com/pop-os/cosmic-idle.git"
     },
     "cosmic-session": {
-      "ref": "943ec0f4c6542726a16772b52e93591d4c63ca90",
+      "ref": "a25c720e341515d01d37d33b1a1a1e3d35f7aebd",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
