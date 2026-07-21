@@ -58,8 +58,8 @@
     },
     "ubiquity-slideshow-regolith": null,
     "cosmic-app-library": {
-      "ref": "ce33b9e1ccbebc2108eddee405a485cb92cb83e3",
-      "source": "https://github.com/pop-os/cosmic-app-library.git"
+      "ref": "4e53c553b29166547f4664a4830d35589be7065b",
+      "source": "https://github.com/Rahul-2k4/cosmic-app-library.git"
     },
     "cosmic-applets": {
       "ref": "e544cb54c242fecbe9399fcb3dd61d9ac19e1214",
