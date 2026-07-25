@@ -4,6 +4,20 @@ set -e
 set -o errexit
 # Extension for Debian repo and package support
 
+# Select a Cargo.toml-declared Rustup toolchain when no explicit override exists.
+prepare_rust_toolchain() {
+  if [ -n "${RUSTUP_TOOLCHAIN:-}" ] || [ -n "${RUSTC:-}" ] || [ -n "${CARGO:-}" ]; then return 0; fi
+  if [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then return 0; fi
+  local rust_version
+  rust_version=$(sed -nE 's/^[[:space:]]*rust-version[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*(#.*)?$/\1/p' Cargo.toml | head -n 1)
+  if [ -z "$rust_version" ] || ! command -v rustup >/dev/null 2>&1; then return 0; fi
+  local installed_toolchain
+  installed_toolchain=$(rustup toolchain list 2>/dev/null | awk -v version="$rust_version" '$1 == version || index($1, version "-") == 1 { print $1; exit }')
+  if [ -n "$installed_toolchain" ]; then export RUSTUP_TOOLCHAIN="${installed_toolchain}"; else
+    echo "Rust toolchain $rust_version declared by Cargo.toml is not installed; using Rustup default" >&2
+  fi
+}
+
 # Build the debuild PATH override for Rust packages without changing the
 # caller's explicit path precedence.
 prepare_debuild_path_args() {
@@ -169,6 +183,7 @@ build_src_package() {
   echo "::group::Building source package $PACKAGE_NAME"
   pushd .
   cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+  prepare_rust_toolchain
 
   echo -e "\033[0;34mSanitizing package folder.\033[0m"
   sanitize_git
@@ -226,6 +241,7 @@ build_bin_package() {
   echo "::group::Building binary package $PACKAGE_NAME"
   pushd .
   cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+  prepare_rust_toolchain
 
   echo -e "\033[0;34mBuilding binary package.\033[0m"
 
