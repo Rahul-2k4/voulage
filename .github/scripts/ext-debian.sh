@@ -8,13 +8,23 @@ set -o errexit
 prepare_rust_toolchain() {
   if [ -n "${RUSTUP_TOOLCHAIN:-}" ] || [ -n "${RUSTC:-}" ] || [ -n "${CARGO:-}" ]; then return 0; fi
   if [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then return 0; fi
-  local rust_version
+
+  local rust_version edition
   rust_version=$(sed -nE 's/^[[:space:]]*rust-version[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*(#.*)?$/\1/p' Cargo.toml | head -n 1)
+  if [ -z "$rust_version" ]; then
+    edition=$(sed -nE 's/^[[:space:]]*edition[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*(#.*)?$/\1/p' Cargo.toml | head -n 1)
+    if [ "$edition" = "2024" ]; then
+      rust_version="${VOULAGE_DEFAULT_RUST_TOOLCHAIN:-1.93}"
+    fi
+  fi
   if [ -z "$rust_version" ] || ! command -v rustup >/dev/null 2>&1; then return 0; fi
+
   local installed_toolchain
   installed_toolchain=$(rustup toolchain list 2>/dev/null | awk -v version="$rust_version" '$1 == version || index($1, version "-") == 1 { print $1; exit }')
-  if [ -n "$installed_toolchain" ]; then export RUSTUP_TOOLCHAIN="${installed_toolchain}"; else
-    echo "Rust toolchain $rust_version declared by Cargo.toml is not installed; using Rustup default" >&2
+  if [ -n "$installed_toolchain" ]; then
+    export RUSTUP_TOOLCHAIN="$installed_toolchain"
+  else
+    echo "Rust toolchain $rust_version declared or selected for Cargo.toml is not installed; using Rustup default" >&2
   fi
 }
 
