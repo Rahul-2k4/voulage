@@ -4,6 +4,39 @@ set -e
 set -o errexit
 # Extension for Debian repo and package support
 
+# Build the debuild PATH override for Rust packages without changing the
+# caller's explicit path precedence.
+prepare_debuild_path_args() {
+  local -n path_args_ref=$1
+  local path_entries=()
+  local cargo_bin_path=""
+
+  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
+    path_entries+=("$DEBUILD_PREPEND_PATH")
+  fi
+
+  if [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then
+    if [ -n "${CARGO_HOME:-}" ] && [ -d "$CARGO_HOME/bin" ]; then
+      cargo_bin_path="$CARGO_HOME/bin"
+    elif [ -d "$HOME/.cargo/bin" ]; then
+      cargo_bin_path="$HOME/.cargo/bin"
+    elif cargo_path=$(command -v cargo 2>/dev/null); then
+      cargo_bin_path=$(dirname "$cargo_path")
+    fi
+    if [ -n "$cargo_bin_path" ]; then
+      path_entries+=("$cargo_bin_path")
+    fi
+  fi
+
+  if [ "${#path_entries[@]}" -gt 0 ]; then
+    local joined_path
+    joined_path=$(IFS=:; printf "%s" "${path_entries[*]}")
+    path_args_ref=(--prepend-path="$joined_path")
+  else
+    path_args_ref=()
+  fi
+}
+
 #### Debian specific functions
 
 # Update the changelog to specify the target distribution codename
@@ -150,9 +183,7 @@ build_src_package() {
   fi
 
   local debuild_path_args=()
-  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
-    debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
-  fi
+  prepare_debuild_path_args debuild_path_args
 
   local vendor_tar_marker=false
   local metadata_file
@@ -204,9 +235,7 @@ build_bin_package() {
   fi
 
   local debuild_path_args=()
-  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
-    debuild_path_args=(--prepend-path="$DEBUILD_PREPEND_PATH")
-  fi
+  prepare_debuild_path_args debuild_path_args
 
   debuild "${debuild_path_args[@]}" -b -sa $deb_build_sign
 
