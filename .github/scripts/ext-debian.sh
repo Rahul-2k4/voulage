@@ -15,7 +15,7 @@ prepare_debuild_path_args() {
     path_entries+=("$DEBUILD_PREPEND_PATH")
   fi
 
-  if [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then
+  if [ -f Cargo.toml ] || [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then
     if [ -n "${CARGO_HOME:-}" ] && [ -d "$CARGO_HOME/bin" ]; then
       cargo_bin_path="$CARGO_HOME/bin"
     elif [ -d "$HOME/.cargo/bin" ]; then
