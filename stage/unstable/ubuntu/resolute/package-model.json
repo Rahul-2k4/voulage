@@ -57,7 +57,7 @@
       "source": "https://github.com/pop-os/cosmic-applets.git"
     },
     "cosmic-comp": {
-      "ref": "71e687366c7a8fdbfe52091235e43cbb44eeb4f6",
+      "ref": "a674153cda267d83b64f6bc53972119eef2e3fcb",
       "source": "https://github.com/Rahul-2k4/cosmic-comp.git"
     },
     "cosmic-files": {
