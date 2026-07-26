@@ -34,12 +34,26 @@ prepare_debuild_path_args() {
   local -n path_args_ref=$1
   local path_entries=()
   local cargo_bin_path=""
+  local rust_toolchain_bin_path=""
 
-  if [ -n "$DEBUILD_PREPEND_PATH" ]; then
+  if [ -n "${DEBUILD_PREPEND_PATH:-}" ]; then
     path_entries+=("$DEBUILD_PREPEND_PATH")
   fi
 
   if [ -f Cargo.toml ] || [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then
+    if [ -z "${RUSTC:-}" ] && [ -z "${CARGO:-}" ] && command -v rustup >/dev/null 2>&1; then
+      local rustc_path
+      if [ -n "${RUSTUP_TOOLCHAIN:-}" ]; then
+        rustc_path=$(rustup which --toolchain "$RUSTUP_TOOLCHAIN" rustc 2>/dev/null || true)
+      else
+        rustc_path=$(rustup which rustc 2>/dev/null || true)
+      fi
+      if [ -n "$rustc_path" ]; then
+        rust_toolchain_bin_path=$(dirname "$rustc_path")
+        path_entries+=("$rust_toolchain_bin_path")
+      fi
+    fi
+
     if [ -n "${CARGO_HOME:-}" ] && [ -d "$CARGO_HOME/bin" ]; then
       cargo_bin_path="$CARGO_HOME/bin"
     elif [ -d "$HOME/.cargo/bin" ]; then

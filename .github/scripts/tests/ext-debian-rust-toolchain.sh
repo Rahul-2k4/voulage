@@ -32,4 +32,26 @@ printf '[package]\nedition = "2024"\n' > Cargo.toml
 export VOULAGE_DEFAULT_RUST_TOOLCHAIN=9.99
 prepare_rust_toolchain
 test -z "${RUSTUP_TOOLCHAIN:-}"
+unset DEBUILD_PREPEND_PATH RUSTUP_TOOLCHAIN CARGO RUSTC VOULAGE_DEFAULT_RUST_TOOLCHAIN
+printf '[package]
+edition = "2024"
+' > Cargo.toml
+prepare_rust_toolchain
+prepare_debuild_path_args debuild_path_args
+rust_bin=$(dirname "$(rustup which --toolchain "$RUSTUP_TOOLCHAIN" rustc)")
+test "${debuild_path_args[0]}" = "--prepend-path=$rust_bin:$HOME/.cargo/bin"
+export DEBUILD_PREPEND_PATH=/custom/prepend
+prepare_debuild_path_args debuild_path_args
+test "${debuild_path_args[0]}" = "--prepend-path=/custom/prepend:$rust_bin:$HOME/.cargo/bin"
+printf '[package]
+rust-version = "1.92"
+edition = "2021"
+' > Cargo.toml
+printf '1.92
+' > rust-toolchain
+unset RUSTUP_TOOLCHAIN DEBUILD_PREPEND_PATH
+prepare_debuild_path_args debuild_path_args
+rust_bin=$(dirname "$(rustup which rustc)")
+test "${debuild_path_args[0]}" = "--prepend-path=$rust_bin:$HOME/.cargo/bin"
+rm rust-toolchain
 printf 'ext-debian Rust toolchain tests passed\n'
