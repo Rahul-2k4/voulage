@@ -33,7 +33,7 @@
       "source": "https://github.com/pop-os/cosmic-idle.git"
     },
     "cosmic-session": {
-      "ref": "c3dcbfbb8f34841bace262b01bb4d8d5c06b4e29",
+      "ref": "e100aafc3f6b550057be7fdc401ff33c6f1db758",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
@@ -103,6 +103,14 @@
     "pop-fonts": {
       "ref": "2da23d5e76bf724c49875e8fd328e1fd5a6de80e",
       "source": "https://github.com/pop-os/fonts.git"
+    },
+    "pop-icon-theme": {
+      "ref": "1a575a8e99b4ae629b9b16543a3a04d148632ba9",
+      "source": "https://github.com/pop-os/icon-theme.git"
+    },
+    "pop-launcher": {
+      "ref": "a332a3a73316a3595816dd02fe426a1d3543167a",
+      "source": "https://github.com/pop-os/launcher.git"
     }
   }
 }
