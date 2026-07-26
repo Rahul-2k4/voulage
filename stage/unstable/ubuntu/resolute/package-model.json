@@ -93,8 +93,8 @@
       "source": "https://github.com/pop-os/cosmic-screenshot.git"
     },
     "xdg-desktop-portal-cosmic": {
-      "ref": "151120e67d532e33e2721319c683a73947be393c",
-      "source": "https://github.com/pop-os/xdg-desktop-portal-cosmic.git"
+      "ref": "8ff215a51716333e41bd55acfe81383e15e26d35",
+      "source": "https://github.com/Rahul-2k4/xdg-desktop-portal-cosmic.git"
     },
     "cosmic-workspaces": {
       "ref": "6d90fb4f453b5ad68ba94fdf534d66085a7e4f52",
