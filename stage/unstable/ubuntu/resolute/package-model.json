@@ -20,6 +20,10 @@
       "ref": "c87640b5f2d4d050bf8366d3c5cb5c9fac81704c",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
+    "regolith-debootstick-setup": {
+      "ref": "bc77dbedf839dd289fc60d3d3f4ef6facab49b3a",
+      "source": "https://github.com/Rahul-2k4/regolith-debootstick-setup.git"
+    },
     "sway-regolith": {
       "ref": "packaging/v1.11-regolith",
       "source": "https://github.com/regolith-linux/sway-regolith.git"

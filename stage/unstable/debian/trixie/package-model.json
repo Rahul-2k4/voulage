@@ -25,8 +25,8 @@
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-debootstick-setup": {
-      "ref": "main",
-      "source": "https://github.com/regolith-linux/regolith-debootstick-setup.git"
+      "ref": "bc77dbedf839dd289fc60d3d3f4ef6facab49b3a",
+      "source": "https://github.com/Rahul-2k4/regolith-debootstick-setup.git"
     },
     "sway-regolith": {
       "ref": "packaging/v1.10-regolith",
