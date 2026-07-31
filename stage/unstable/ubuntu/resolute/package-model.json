@@ -45,8 +45,8 @@
       "source": "https://github.com/pop-os/cosmic-bg.git"
     },
     "cosmic-settings": {
-      "ref": "ca9b7aa138ea7925296d49615a0fb298cfa01460",
-      "source": "https://github.com/pop-os/cosmic-settings"
+      "ref": "d65f98b80d9236584efea597d7019609b59b7bf2",
+      "source": "https://github.com/Rahul-2k4/cosmic-settings.git"
     },
     "cosmic-app-library": {
       "ref": "3fbc6975fdd9062e88e1773d11647cba04de6bb5",
