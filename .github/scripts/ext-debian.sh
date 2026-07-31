@@ -139,8 +139,12 @@ build_src_package() {
   sanitize_git
 
   echo -e "\033[0;34mBuilding source package.\033[0m"
-  sudo apt update
-  sudo apt build-dep -y .
+  if [ "${LOCAL_BUILD:-false}" == "true" ] && [ "${SKIP_APT_BUILD_DEP:-false}" == "true" ]; then
+    echo "Skipping host apt update/build-dep; caller is responsible for preinstalled build dependencies."
+  else
+    sudo apt update
+    sudo apt build-dep -y .
+  fi
 
   local deb_build_sign=""
   if [ "$LOCAL_BUILD" == "true" ]; then
