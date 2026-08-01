@@ -17,7 +17,7 @@
       "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "regolith-session": {
-      "ref": "4cb6f8877fd0ffbba6070b952e28ce18fe63902d",
+      "ref": "e44e7cc81a213fda72377ed2ced857054bef1e8a",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "sway-regolith": {
