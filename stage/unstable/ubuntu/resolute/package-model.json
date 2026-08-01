@@ -5,11 +5,11 @@
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
     "regolith-displayd": {
-      "ref": "2cbbd65adac9cf4585d2cd9682e4d4055b83351c",
+      "ref": "c4d4edba2f6ff8c1db8f006329fa6bfef01de63b",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-inputd": {
-      "ref": "ca056b895f5db71262f0760ed852d73bf6e235c8",
+      "ref": "5ea19966d80373c82a362f53bbab2558739809ef",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-wm-config": {
@@ -17,7 +17,7 @@
       "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "regolith-session": {
-      "ref": "6b5777d9f6ee2e292248ed501f4f4195522fb3ac",
+      "ref": "016c918fa06a2aa5452ece29cd5a2316e4dd5317",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "sway-regolith": {
