@@ -22,7 +22,7 @@ expected_ref_for() {
   case "$1" in
     regolith-session) printf '%s\n' '6b5777d9f6ee2e292248ed501f4f4195522fb3ac' ;;
     regolith-inputd) printf '%s\n' 'e612e20bba09d9d0a722c141b1df2be513c5abf6' ;;
-    regolith-displayd) printf '%s\n' 'c4d4edba2f6ff8c1db8f006329fa6bfef01de63b' ;;
+    regolith-displayd) printf '%s\n' '1feaa987d83b03b8d6fb97c9c5bccd316efc4241' ;;
     *) printf 'unknown package: %s\n' "$1" >&2; return 1 ;;
   esac
 }
