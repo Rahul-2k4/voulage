@@ -5,7 +5,7 @@
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
     "regolith-displayd": {
-      "ref": "c744f55c9c60f50ff5cb31209a8654ff7a8879ca",
+      "ref": "e8cc8e07e41e7b0b6dc2f1c9a7765876dfe0c46c",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-inputd": {
