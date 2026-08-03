@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - "stage/unstable/ubuntu/resolute/package-model.json"
+      - "tests/model-integrity.sh"
       - "tests/canonical-regolith-cosmic-model.sh"
       - ".github/workflows/test-canonical-voulage-model.yml"
   pull_request:
     paths:
       - "stage/unstable/ubuntu/resolute/package-model.json"
+      - "tests/model-integrity.sh"
       - "tests/canonical-regolith-cosmic-model.sh"
       - ".github/workflows/test-canonical-voulage-model.yml"
   workflow_dispatch:
@@ -23,6 +25,8 @@ jobs:
         env:
           VERIFY_REMOTE_REFS: "1"
         run: |
+          bash -n tests/model-integrity.sh
           bash -n tests/canonical-regolith-cosmic-model.sh
           jq -e . stage/unstable/ubuntu/resolute/package-model.json >/dev/null
+          ./tests/model-integrity.sh stage/unstable/ubuntu/resolute/package-model.json
           ./tests/canonical-regolith-cosmic-model.sh
