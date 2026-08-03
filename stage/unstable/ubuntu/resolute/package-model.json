@@ -1,7 +1,7 @@
 {
   "packages": {
     "regolith-control-center": {
-      "ref": "regolith/49",
+      "ref": "93401b8d6bdb3f129b5058b97e604580f715648c",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
     "regolith-displayd": {
@@ -21,7 +21,7 @@
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "sway-regolith": {
-      "ref": "packaging/v1.11-regolith",
+      "ref": "637893954cb44ffd61342df6cdac450f8f322064",
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
     "cosmic-osd": {

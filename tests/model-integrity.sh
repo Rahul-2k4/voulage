@@ -49,6 +49,8 @@ read_model_field() {
         error("ref must be a string")
       elif (($package.ref | length) == 0) then
         error("ref must be non-empty")
+      elif (($package.ref | test("^[0-9a-fA-F]{40}$")) | not) then
+        error("ref must be an immutable 40-hex commit SHA")
       else
         [$package.source, $package.ref] | @tsv
       end
