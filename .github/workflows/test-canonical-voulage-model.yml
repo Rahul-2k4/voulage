@@ -20,6 +20,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate canonical Resolute model
+        env:
+          VERIFY_REMOTE_REFS: "1"
         run: |
           bash -n tests/canonical-regolith-cosmic-model.sh
           jq -e . stage/unstable/ubuntu/resolute/package-model.json >/dev/null
