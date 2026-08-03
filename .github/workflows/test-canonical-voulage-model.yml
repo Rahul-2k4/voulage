@@ -1,0 +1,26 @@
+name: Test Canonical Voulage COSMIC Model
+
+on:
+  push:
+    paths:
+      - "stage/unstable/ubuntu/resolute/package-model.json"
+      - "tests/canonical-regolith-cosmic-model.sh"
+      - ".github/workflows/test-canonical-voulage-model.yml"
+  pull_request:
+    paths:
+      - "stage/unstable/ubuntu/resolute/package-model.json"
+      - "tests/canonical-regolith-cosmic-model.sh"
+      - ".github/workflows/test-canonical-voulage-model.yml"
+  workflow_dispatch:
+
+jobs:
+  canonical-model:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate canonical Resolute model
+        run: |
+          bash -n tests/canonical-regolith-cosmic-model.sh
+          jq -e . stage/unstable/ubuntu/resolute/package-model.json >/dev/null
+          ./tests/canonical-regolith-cosmic-model.sh
