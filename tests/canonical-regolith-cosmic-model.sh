@@ -20,7 +20,7 @@ trap cleanup_tmp EXIT
 
 expected_ref_for() {
   case "$1" in
-    regolith-session) printf '%s\n' '54109e2b57940afecee1b24540be41ea936587aa' ;;
+    regolith-session) printf '%s\n' '88d7759d12e76ec205189d1504d98718e95f1b57' ;;
     regolith-inputd) printf '%s\n' 'e612e20bba09d9d0a722c141b1df2be513c5abf6' ;;
     regolith-displayd) printf '%s\n' 'e8cc8e07e41e7b0b6dc2f1c9a7765876dfe0c46c' ;;
     *) printf 'unknown package: %s\n' "$1" >&2; return 1 ;;
