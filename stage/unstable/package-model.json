@@ -173,7 +173,7 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "rahul/cosmic-idle-owner-runtime-fix-20260808",
+      "ref": "91143682751be37c17afe70b37a5cf65bc5ac889",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
@@ -189,7 +189,7 @@
       "source": "https://github.com/regolith-linux/regolith-unclutter-xfixes.git"
     },
     "regolith-wm-config": {
-      "ref": "rahul/cosmic-idle-owner-wm-config-20260808",
+      "ref": "4050cabb77cc56ad5a004cfc4d3bcbc5840ef591",
       "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "remontoire": {
