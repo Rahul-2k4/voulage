@@ -189,7 +189,7 @@
       "source": "https://github.com/regolith-linux/regolith-unclutter-xfixes.git"
     },
     "regolith-wm-config": {
-      "ref": "a6eecdcb6a385ee887ee0d35571caf475e5292e8",
+      "ref": "10225c056ee3ae15ab5745aba5a86ba611801ed5",
       "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "remontoire": {
