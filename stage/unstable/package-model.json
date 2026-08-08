@@ -129,7 +129,7 @@
       "source": "https://github.com/regolith-linux/regolith-desktop.git"
     },
     "regolith-displayd": {
-      "ref": "rahul/cosmic-wayland-persist-vendored-20260804",
+      "ref": "e8cc8e07e41e7b0b6dc2f1c9a7765876dfe0c46c",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-distro-ubuntu": {
@@ -145,7 +145,7 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "rahul/inputd-empty-source-fallback-20260808",
+      "ref": "e32d0497f67fea94fb98f803c406c704191b741c",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
