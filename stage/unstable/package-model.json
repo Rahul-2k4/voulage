@@ -129,8 +129,8 @@
       "source": "https://github.com/regolith-linux/regolith-desktop.git"
     },
     "regolith-displayd": {
-      "ref": "master",
-      "source": "https://github.com/regolith-linux/regolith-displayd.git"
+      "ref": "rahul/cosmic-systemd-displayd-metadata",
+      "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-distro-ubuntu": {
       "ref": "main",
@@ -145,8 +145,8 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "master",
-      "source": "https://github.com/regolith-linux/regolith-inputd.git"
+      "ref": "rahul/inputd-handler-startup-retry-fixed-20260802",
+      "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
       "ref": "master",
@@ -173,8 +173,8 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "main",
-      "source": "https://github.com/regolith-linux/regolith-session.git"
+      "ref": "rahul/cosmic-idle-owner-canonical-20260808",
+      "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
       "ref": "main",
@@ -189,8 +189,8 @@
       "source": "https://github.com/regolith-linux/regolith-unclutter-xfixes.git"
     },
     "regolith-wm-config": {
-      "ref": "main",
-      "source": "https://github.com/regolith-linux/regolith-wm-config.git"
+      "ref": "rahul/cosmic-idle-owner-wm-config-20260808",
+      "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "remontoire": {
       "ref": "master",
