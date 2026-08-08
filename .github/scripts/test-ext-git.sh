@@ -34,6 +34,7 @@ git -C "$SUBMODULE_WORK" add sub.txt
 git -C "$SUBMODULE_WORK" commit -m "submodule init" >/dev/null
 git -C "$SUBMODULE_WORK" remote add origin "$SUBMODULE_REMOTE"
 git -C "$SUBMODULE_WORK" push origin main >/dev/null
+git -C "$SUBMODULE_REMOTE" symbolic-ref HEAD refs/heads/main
 SUBMODULE_SHA=$(git -C "$SUBMODULE_WORK" rev-parse HEAD)
 
 PACKAGE_REMOTE="$TMP_ROOT/package-remote.git"
