@@ -145,7 +145,7 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "rahul/inputd-handler-startup-retry-fixed-20260802",
+      "ref": "rahul/inputd-empty-source-fallback-20260808",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
@@ -173,7 +173,7 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "rahul/cosmic-idle-owner-canonical-20260808",
+      "ref": "rahul/cosmic-idle-owner-runtime-fix-20260808",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
