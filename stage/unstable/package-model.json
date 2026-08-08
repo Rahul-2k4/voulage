@@ -129,7 +129,7 @@
       "source": "https://github.com/regolith-linux/regolith-desktop.git"
     },
     "regolith-displayd": {
-      "ref": "e8cc8e07e41e7b0b6dc2f1c9a7765876dfe0c46c",
+      "ref": "817becd9dc7e6a12f13f3f30f663555212ae78fa",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-distro-ubuntu": {
@@ -173,7 +173,7 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "fc03e97578e342cf5109b1cf0f41b406009f5bfd",
+      "ref": "3523047b7c2f7a2ca4e3d1fd800c10c342ca7a19",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
