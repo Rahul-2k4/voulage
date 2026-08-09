@@ -129,7 +129,7 @@
       "source": "https://github.com/regolith-linux/regolith-desktop.git"
     },
     "regolith-displayd": {
-      "ref": "817becd9dc7e6a12f13f3f30f663555212ae78fa",
+      "ref": "21e4553618cb8f0d21e46bac13a37451cb489059",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-distro-ubuntu": {
