@@ -173,7 +173,7 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "339b661e7269b1418cbd116bd2363c7aa2e9b00a",
+      "ref": "3523047b7c2f7a2ca4e3d1fd800c10c342ca7a19",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
