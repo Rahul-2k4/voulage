@@ -1,7 +1,7 @@
 {
   "packages": {
     "cosmolith": {
-      "ref": "bcb1b52ee01bffe23bd1e115fca04a276aa43fbd",
+      "ref": "42154295d815dd6bff73acb3f6b395ce5a1abd4c",
       "source": "https://github.com/Rahul-2k4/cosmolith.git"
     },
     "xrescat": {
