@@ -36,6 +36,8 @@ Options:
   --help                     Show this message
 
 Note: all the options are required when using $0
+      Set VOULAGE_SKIP_APT_BUILD_DEP=true to skip only apt update/build-dep
+      when dependencies are already available; package build steps still run.
 EOF
 }
 
