@@ -82,6 +82,7 @@ while [[ $# -gt 0 ]]; do
     --distro)        parse_flag "$1" "$2" DISTRO; shift 2 ;;
     --codename)      parse_flag "$1" "$2" CODENAME; shift 2 ;;
     --stage)         parse_flag "$1" "$2" STAGE; shift 2 ;;
+    --arch)         parse_flag "$1" "$2" ARCH; shift 2 ;;
 
     -h|--help)       usage; exit 0; ;;
     -*|--*)          echo "Unknown option $1"; exit 1;  ;;
