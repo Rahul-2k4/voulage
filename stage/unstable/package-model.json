@@ -145,7 +145,7 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "e641b434c76c70e9a21e492adea577607e096d03",
+      "ref": "66099f67a5498f3ad10fe65ef69eb6e8b57ac0c2",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
@@ -173,7 +173,7 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "3523047b7c2f7a2ca4e3d1fd800c10c342ca7a19",
+      "ref": "7fb72a8d93e8b33fc6bfbca9292398252003b477",
       "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
