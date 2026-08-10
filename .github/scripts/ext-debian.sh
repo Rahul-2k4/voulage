@@ -7,11 +7,34 @@ set -o errexit
 #### Debian specific functions
 
 # Update the changelog to specify the target distribution codename
+set_changelog_identity() {
+  local maintainer maintainer_email maintainer_name
+  local maintainer_regex="^(.*)[[:space:]]+<([^>]*)>[[:space:]]*$"
+  maintainer=$(awk -F': ' '$1 == "Maintainer" { print substr($0, index($0, ": ") + 2); exit }' debian/control 2>/dev/null || true)
+
+  if [[ "$maintainer" =~ $maintainer_regex ]]; then
+    maintainer_name="${BASH_REMATCH[1]}"
+    maintainer_email="${BASH_REMATCH[2]}"
+  else
+    # Keep local and Voulage builds deterministic when package metadata is incomplete.
+    maintainer_name="Regolith Linux"
+    maintainer_email="regolith.linux@gmail.com"
+  fi
+
+  if [[ -z "${DEBFULLNAME:-}" ]]; then
+    export DEBFULLNAME="$maintainer_name"
+  fi
+  if [[ -z "${DEBEMAIL:-}" && -z "${EMAIL:-}" ]]; then
+    export DEBEMAIL="$maintainer_email"
+  fi
+}
+# Update the changelog to specify the target distribution codename
 update_changelog() {
   # set -x
   echo "::group::Updating debian/changelog file"
   cd "${PKG_BUILD_PATH:?}/$PACKAGE_NAME"
   version=$(dpkg-parsechangelog --show-field Version)
+  set_changelog_identity
   echo -e "\033[0;34mUpdating changlog to ${version}-1regolith-$CODENAME for $CODENAME...\033[0m"
   dch --force-distribution --distribution "$CODENAME" --newversion "${version}-1regolith-$CODENAME" "Automated Voulage release"
 

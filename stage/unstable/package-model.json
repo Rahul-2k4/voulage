@@ -129,8 +129,8 @@
       "source": "https://github.com/regolith-linux/regolith-desktop.git"
     },
     "regolith-displayd": {
-      "ref": "master",
-      "source": "https://github.com/regolith-linux/regolith-displayd.git"
+      "ref": "817becd9dc7e6a12f13f3f30f663555212ae78fa",
+      "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-distro-ubuntu": {
       "ref": "main",
@@ -145,8 +145,8 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "master",
-      "source": "https://github.com/regolith-linux/regolith-inputd.git"
+      "ref": "e641b434c76c70e9a21e492adea577607e096d03",
+      "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
       "ref": "master",
@@ -173,8 +173,8 @@
       "source": "https://github.com/regolith-linux/regolith-rofication.git"
     },
     "regolith-session": {
-      "ref": "main",
-      "source": "https://github.com/regolith-linux/regolith-session.git"
+      "ref": "3523047b7c2f7a2ca4e3d1fd800c10c342ca7a19",
+      "source": "https://github.com/Rahul-2k4/regolith-session.git"
     },
     "regolith-sway-touchpad-gestures": {
       "ref": "main",
@@ -189,8 +189,8 @@
       "source": "https://github.com/regolith-linux/regolith-unclutter-xfixes.git"
     },
     "regolith-wm-config": {
-      "ref": "main",
-      "source": "https://github.com/regolith-linux/regolith-wm-config.git"
+      "ref": "10225c056ee3ae15ab5745aba5a86ba611801ed5",
+      "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
     },
     "remontoire": {
       "ref": "master",
