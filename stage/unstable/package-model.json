@@ -145,7 +145,7 @@
       "source": "https://github.com/regolith-linux/regolith-i3xrocks-config.git"
     },
     "regolith-inputd": {
-      "ref": "e641b434c76c70e9a21e492adea577607e096d03",
+      "ref": "c658754ec10ac75422cba8e1c3517bba6075795f",
       "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
     },
     "regolith-lightdm-config": {
