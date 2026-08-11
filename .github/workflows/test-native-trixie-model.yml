@@ -1,0 +1,36 @@
+name: Test native Trixie COSMIC model
+
+on:
+  push:
+    paths:
+      - stage/unstable/debian/trixie/package-model.json
+      - tests/native-trixie-cosmic-model.sh
+      - .github/workflows/test-native-trixie-model.yml
+  pull_request:
+    paths:
+      - stage/unstable/debian/trixie/package-model.json
+      - tests/native-trixie-cosmic-model.sh
+      - .github/workflows/test-native-trixie-model.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-native-trixie-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate JSON model
+        run: jq -e . stage/unstable/debian/trixie/package-model.json >/dev/null
+
+      - name: Run offline model checks
+        run: bash tests/native-trixie-cosmic-model.sh
+
+      - name: Run remote ref checks
+        env:
+          VERIFY_REMOTE_REFS: '1'
+        run: bash tests/native-trixie-cosmic-model.sh
