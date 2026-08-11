@@ -1,0 +1,100 @@
+name: Build native Trixie COSMIC packages
+
+on:
+  push:
+    paths:
+      - stage/unstable/debian/trixie/package-model.json
+      - .github/scripts/ext-debian.sh
+      - .github/scripts/ext-git.sh
+      - .github/scripts/local-build.sh
+      - .github/scripts/ext-debian-native-trixie-temporary.sh
+      - .github/workflows/build-native-trixie-cosmic.yml
+  pull_request:
+    paths:
+      - stage/unstable/debian/trixie/package-model.json
+      - .github/scripts/ext-debian.sh
+      - .github/scripts/ext-git.sh
+      - .github/scripts/local-build.sh
+      - .github/scripts/ext-debian-native-trixie-temporary.sh
+      - .github/workflows/build-native-trixie-cosmic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build ${{ matrix.package }} (unsigned evidence)
+    runs-on: ubuntu-24.04
+    container: ghcr.io/regolith-linux/ci-debian:trixie-amd64
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - cosmic-session
+          - cosmic-settings-daemon
+
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      LOCAL_BUILD: 'true'
+      PACKAGE_NAME: ${{ matrix.package }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read package source from model
+        id: model
+        run: |
+          set -euo pipefail
+          model=stage/unstable/debian/trixie/package-model.json
+          jq -e --arg package "$PACKAGE_NAME" \
+            '.packages[$package] | .source and .ref' "$model" >/dev/null
+          source_url=$(jq -er --arg package "$PACKAGE_NAME" \
+            '.packages[$package].source' "$model")
+          source_ref=$(jq -er --arg package "$PACKAGE_NAME" \
+            '.packages[$package].ref' "$model")
+          printf 'source-url=%s\n' "$source_url" >> "$GITHUB_OUTPUT"
+          printf 'source-ref=%s\n' "$source_ref" >> "$GITHUB_OUTPUT"
+
+      - name: Build unsigned local evidence
+        env:
+          PACKAGE_URL: ${{ steps.model.outputs.source-url }}
+          PACKAGE_REF: ${{ steps.model.outputs.source-ref }}
+        run: |
+          set -euo pipefail
+          mkdir -p logs
+          # local-build.sh sets LOCAL_BUILD=true; ext-debian.sh then uses -us -uc.
+          echo "Artifact output is unsigned build evidence only; it is not a signed release or apt publication."
+          set +e
+          "$GITHUB_WORKSPACE/.github/scripts/local-build.sh" \
+            --extension "$GITHUB_WORKSPACE/.github/scripts/ext-debian-native-trixie-temporary.sh" \
+            --git-repo-path "$GITHUB_WORKSPACE" \
+            --package-name "$PACKAGE_NAME" \
+            --package-url "$PACKAGE_URL" \
+            --package-ref "$PACKAGE_REF" \
+            --distro debian \
+            --codename trixie \
+            --arch amd64 \
+            --stage unstable \
+            2>&1 | tee "logs/${PACKAGE_NAME}.log"
+          status=${PIPESTATUS[0]}
+          set -e
+          exit "$status"
+
+      - name: Upload unsigned build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-trixie-${{ matrix.package }}-unsigned-build-evidence
+          if-no-files-found: warn
+          path: |
+            logs/
+            pkgbuild/
+            pkgpublish/
