@@ -80,7 +80,6 @@ jobs:
             --package-ref "$PACKAGE_REF" \
             --distro debian \
             --codename trixie \
-            --arch amd64 \
             --stage unstable \
             2>&1 | tee "logs/${PACKAGE_NAME}.log"
           status=${PIPESTATUS[0]}
