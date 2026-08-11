@@ -8,6 +8,56 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ext-debian.sh"
 # Keep the source checkout authoritative: select the channel declared by the
 # package, install it reproducibly through rustup, and pass the real toolchain
 # bin directory through debuild's environment boundary.
+bootstrap_rustup() {
+  local rustup_target=""
+  local installer_url=""
+  local checksum_url=""
+  local installer_dir=""
+  local installer_path=""
+  local checksum_path=""
+  local expected_checksum=""
+  local actual_checksum=""
+  local cargo_home="${CARGO_HOME:-$HOME/.cargo}"
+
+  case "$(uname -m)" in
+    x86_64) rustup_target="x86_64-unknown-linux-gnu" ;;
+    aarch64|arm64) rustup_target="aarch64-unknown-linux-gnu" ;;
+    *)
+      echo "Unsupported architecture for rustup bootstrap: $(uname -m)" >&2
+      return 1
+      ;;
+  esac
+
+  installer_url="https://static.rust-lang.org/rustup/dist/$rustup_target/rustup-init"
+  checksum_url="https://static.rust-lang.org/rustup/dist/$rustup_target/rustup-init.sha256"
+  installer_dir=$(mktemp -d)
+  installer_path="$installer_dir/rustup-init"
+  checksum_path="$installer_dir/rustup-init.sha256"
+
+  curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
+    --output "$installer_path" "$installer_url"
+  curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
+    --output "$checksum_path" "$checksum_url"
+
+  expected_checksum=$(awk 'NF { print $1; exit }' "$checksum_path")
+  actual_checksum=$(sha256sum "$installer_path" | awk '{ print $1 }')
+  if [[ ! "$expected_checksum" =~ ^[[:xdigit:]]{64}$ ]] || [ "$expected_checksum" != "$actual_checksum" ]; then
+    echo "rustup-init checksum verification failed" >&2
+    rm -rf "$installer_dir"
+    return 1
+  fi
+
+  chmod 0755 "$installer_path"
+  "$installer_path" --profile minimal --default-toolchain none --no-modify-path -y
+  rm -rf "$installer_dir"
+
+  export PATH="$cargo_home/bin:$PATH"
+  if ! command -v rustup >/dev/null 2>&1; then
+    echo "rustup bootstrap completed without installing rustup" >&2
+    return 1
+  fi
+}
+
 prepare_declared_rust_toolchain() {
   local project_root="$1"
   local toolchain_file=""
@@ -31,8 +81,7 @@ prepare_declared_rust_toolchain() {
     return 1
   fi
   if ! command -v rustup >/dev/null 2>&1; then
-    echo "rustup is required to build the declared Rust toolchain ($toolchain)" >&2
-    return 1
+    bootstrap_rustup
   fi
 
   rustup toolchain install "$toolchain" --profile minimal --no-self-update
