@@ -24,7 +24,7 @@ trap 'rm -rf -- "$tmp_root"' EXIT
 
 expected_ref_for() {
   case "$1" in
-    cosmic-session) printf '%s\n' '1fe437f6464b5f5081cc50dbd7e0d20951c51bca' ;;
+    cosmic-session) printf '%s\n' '95219162c2e9ae461d8a19f62d1cb019d9de617e' ;;
     cosmic-settings-daemon) printf '%s\n' '0dc2c4c1afcef306730d8bcd10070dd35b90b831' ;;
     *) printf 'unknown package: %s\n' "$1" >&2; return 1 ;;
   esac

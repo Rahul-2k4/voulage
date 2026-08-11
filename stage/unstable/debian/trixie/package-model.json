@@ -17,7 +17,7 @@
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
     "cosmic-session": {
-      "ref": "1fe437f6464b5f5081cc50dbd7e0d20951c51bca",
+      "ref": "95219162c2e9ae461d8a19f62d1cb019d9de617e",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
