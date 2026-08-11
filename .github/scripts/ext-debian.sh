@@ -147,6 +147,19 @@ build_src_package() {
     deb_build_sign="-us -uc"
   fi
 
+  case "$PACKAGE_NAME" in
+    cosmic-session|cosmic-settings-daemon)
+      local source_options_tmp
+      local cargo_config_ignore="--extend-diff-ignore=(^|/)\.cargo/config(\.toml)?$"
+      source_options_tmp=$(mktemp debian/source/options.XXXXXX)
+      if [ -f debian/source/options ]; then
+        grep -Fvx -e "$cargo_config_ignore" debian/source/options > "$source_options_tmp" || true
+      fi
+      printf "%s\n" "$cargo_config_ignore" >> "$source_options_tmp"
+      mv "$source_options_tmp" debian/source/options
+      ;;
+  esac
+
   debuild -S -sa $deb_build_sign
 
   popd
