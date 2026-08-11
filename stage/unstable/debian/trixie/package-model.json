@@ -17,11 +17,11 @@
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
     "cosmic-session": {
-      "ref": "83a8b7c0021f19e714dd09eea3aba2e48a492e6a",
+      "ref": "4459ef07c72209a0d7682ba7b296a5ecede6fbff",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
     },
     "cosmic-settings-daemon": {
-      "ref": "04bdcce710e48aa1b8480780a981f0bf0302f901",
+      "ref": "084b46040629ff38757f532ca00d9c8629208ead",
       "source": "https://github.com/Rahul-2k4/cosmic-settings-daemon.git"
     },
     "ubiquity-slideshow-regolith": null
