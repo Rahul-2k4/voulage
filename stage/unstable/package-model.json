@@ -267,6 +267,10 @@
     "cosmic-icons": {
       "ref": "668a7acb6c12f12f1e36e5287a6c16e0595967c8",
       "source": "https://github.com/Rahul-2k4/cosmic-icons.git"
+    },
+    "cosmic-launcher": {
+      "ref": "232b56a4561975fe8cdbf25ddc64a394f8a5f696",
+      "source": "https://github.com/Rahul-2k4/cosmic-launcher.git"
     }
   }
 }
