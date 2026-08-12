@@ -247,6 +247,10 @@
     "xrescat": {
       "ref": "master",
       "source": "https://github.com/regolith-linux/xrescat.git"
+    },
+    "cosmic-comp": {
+      "ref": "9b8e686d6c8e7e70eb5e2c195cef1f4d69029bc0",
+      "source": "https://github.com/Rahul-2k4/cosmic-comp.git"
     }
   }
 }
