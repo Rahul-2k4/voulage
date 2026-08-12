@@ -259,6 +259,10 @@
     "cosmic-applets": {
       "ref": "316e8e3e86cb8a12e837f97e07330ff15cc952f3",
       "source": "https://github.com/Rahul-2k4/cosmic-applets.git"
+    },
+    "cosmic-greeter": {
+      "ref": "2cbb199a1613e7431a642ad601b8b7cb2546bbea",
+      "source": "https://github.com/Rahul-2k4/cosmic-greeter.git"
     }
   }
 }
