@@ -251,6 +251,10 @@
     "cosmic-comp": {
       "ref": "9b8e686d6c8e7e70eb5e2c195cef1f4d69029bc0",
       "source": "https://github.com/Rahul-2k4/cosmic-comp.git"
+    },
+    "cosmic-files": {
+      "ref": "f645c55a3876e9e2edcf88d2d852c40e9468a7ec",
+      "source": "https://github.com/Rahul-2k4/cosmic-files.git"
     }
   }
 }
