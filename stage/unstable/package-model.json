@@ -28,6 +28,10 @@
       "ref": "bf6eefd1278aefb1cea92ead2d316503b31fcb78",
       "source": "https://github.com/Rahul-2k4/cosmic-settings.git"
     },
+    "cosmic-settings-daemon": {
+      "ref": "d6a7b52ecf65649ebd1a50132a0b870ffd7b3f15",
+      "source": "https://github.com/Rahul-2k4/cosmic-settings-daemon.git"
+    },
     "cosmolith": {
       "ref": "70bb1bdba7f6cab5a7daf870e416f51d10bb2227",
       "source": "https://github.com/Rahul-2k4/cosmolith.git"
