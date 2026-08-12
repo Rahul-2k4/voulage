@@ -17,15 +17,15 @@
       "source": "https://github.com/regolith-linux/childe.git"
     },
     "cosmic-bg": {
-      "ref": "a6616484fd0ba326be3e84d0e0667e9afa7be323",
+      "ref": "84f6f024d8718f33bbc495527fe437731a427960",
       "source": "https://github.com/Rahul-2k4/cosmic-bg.git"
     },
     "cosmic-settings": {
-      "ref": "d65f98b80d9236584efea597d7019609b59b7bf2",
+      "ref": "bf6eefd1278aefb1cea92ead2d316503b31fcb78",
       "source": "https://github.com/Rahul-2k4/cosmic-settings.git"
     },
     "cosmolith": {
-      "ref": "00f598edbdb98d6b035c4f405a96fcf28d75a84c",
+      "ref": "70bb1bdba7f6cab5a7daf870e416f51d10bb2227",
       "source": "https://github.com/Rahul-2k4/cosmolith.git"
     },
     "dracula-gtk": {
