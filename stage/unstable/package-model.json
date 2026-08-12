@@ -29,8 +29,8 @@
       "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
     },
     "cosmic-panel": {
-      "source": "https://github.com/pop-os/cosmic-panel",
-      "ref": "epoch-1.0.8"
+      "source": "https://github.com/Rahul-2k4/cosmic-panel.git",
+      "ref": "9c9dba030f7611d742b03e70ca9a5fd988136f3d"
     },
     "cosmic-settings": {
       "ref": "bf6eefd1278aefb1cea92ead2d316503b31fcb78",
