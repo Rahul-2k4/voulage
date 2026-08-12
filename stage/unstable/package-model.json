@@ -16,6 +16,10 @@
       "ref": "main",
       "source": "https://github.com/regolith-linux/childe.git"
     },
+    "cosmic-app-library": {
+      "ref": "3fbc6975fdd9062e88e1773d11647cba04de6bb5",
+      "source": "https://github.com/Rahul-2k4/cosmic-app-library.git"
+    },
     "cosmic-bg": {
       "ref": "84f6f024d8718f33bbc495527fe437731a427960",
       "source": "https://github.com/Rahul-2k4/cosmic-bg.git"
