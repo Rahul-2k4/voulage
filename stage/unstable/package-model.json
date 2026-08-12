@@ -20,6 +20,10 @@
       "ref": "84f6f024d8718f33bbc495527fe437731a427960",
       "source": "https://github.com/Rahul-2k4/cosmic-bg.git"
     },
+    "cosmic-idle": {
+      "ref": "9fe29959394f48d6aa7b769d466faf1a28626761",
+      "source": "https://github.com/Rahul-2k4/cosmic-idle.git"
+    },
     "cosmic-osd": {
       "ref": "5441fecabc90e4112c1563c7749ebeaf7f130c00",
       "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
