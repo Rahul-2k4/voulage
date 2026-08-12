@@ -255,6 +255,10 @@
     "cosmic-files": {
       "ref": "1edf8c5e429a8a32181235689e132eea23d68ce1",
       "source": "https://github.com/Rahul-2k4/cosmic-files.git"
+    },
+    "cosmic-applets": {
+      "ref": "316e8e3e86cb8a12e837f97e07330ff15cc952f3",
+      "source": "https://github.com/Rahul-2k4/cosmic-applets.git"
     }
   }
 }
