@@ -261,8 +261,12 @@
       "source": "https://github.com/Rahul-2k4/cosmic-applets.git"
     },
     "cosmic-greeter": {
-      "ref": "2cbb199a1613e7431a642ad601b8b7cb2546bbea",
+      "ref": "7fa407ff62f260e8538ebbebf2bacb6da4344acf",
       "source": "https://github.com/Rahul-2k4/cosmic-greeter.git"
+    },
+    "cosmic-icons": {
+      "ref": "668a7acb6c12f12f1e36e5287a6c16e0595967c8",
+      "source": "https://github.com/Rahul-2k4/cosmic-icons.git"
     }
   }
 }
