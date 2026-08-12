@@ -32,6 +32,10 @@
       "ref": "5441fecabc90e4112c1563c7749ebeaf7f130c00",
       "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
     },
+    "cosmic-randr": {
+      "ref": "313142e5dc855383b20582f19aa89cf678d3a557",
+      "source": "https://github.com/Rahul-2k4/cosmic-randr.git"
+    },
     "cosmic-settings": {
       "ref": "bf6eefd1278aefb1cea92ead2d316503b31fcb78",
       "source": "https://github.com/Rahul-2k4/cosmic-settings.git"
