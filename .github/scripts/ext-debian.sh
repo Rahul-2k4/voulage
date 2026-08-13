@@ -110,8 +110,29 @@ update_changelog() {
   if [ -f "$source_format" ] && grep -Fqx "3.0 (native)" "$source_format"; then
     printf "%s\n" "3.0 (quilt)" > "$source_format"
   fi
-  echo -e "\033[0;34mUpdating changlog to ${version}-1regolith-$CODENAME for $CODENAME...\033[0m"
-  dch --force-distribution --distribution "$CODENAME" --newversion "${version}-1regolith-$CODENAME" "Automated Voulage release"
+  case "$version" in
+    *-1regolith-*)
+      if [[ "$version" =~ ^(.+)-([0-9]+)-1regolith-.+$ ]]; then
+        base_version="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+      else
+        base_version="${version%-1regolith-*}-1"
+      fi
+      ;;
+    *)
+      if [[ "$version" =~ ^.+-[0-9]+$ ]]; then
+        base_version="$version"
+      else
+        base_version="${version}-1"
+      fi
+      ;;
+  esac
+  new_version="${base_version}-1regolith-$CODENAME"
+  echo -e "\033[0;34mUpdating changlog to ${new_version} for $CODENAME...\033[0m"
+  if [ "$new_version" != "$version" ]; then
+    dch --force-distribution --distribution "$CODENAME" --newversion "$new_version" "Automated Voulage release"
+  else
+    echo -e "\033[0;34mVersion already targets $CODENAME; skipping dch.\033[0m"
+  fi
 
   cd - >/dev/null 2>&1 || exit
   echo "::endgroup::"
