@@ -291,6 +291,10 @@
     "cosmic-screenshot": {
       "ref": "46d96cce78d0a528d92e352fcd48d388b5814d7f",
       "source": "https://github.com/Rahul-2k4/cosmic-screenshot.git"
+    },
+    "cosmic-notifications": {
+      "ref": "a4799768f5ab0993fd6d7c8762b1ecf7ee3106ab",
+      "source": "https://github.com/Rahul-2k4/cosmic-notifications.git"
     }
   }
 }
