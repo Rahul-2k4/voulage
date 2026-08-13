@@ -287,6 +287,10 @@
     "cosmic-launcher": {
       "ref": "232b56a4561975fe8cdbf25ddc64a394f8a5f696",
       "source": "https://github.com/Rahul-2k4/cosmic-launcher.git"
+    },
+    "cosmic-screenshot": {
+      "ref": "46d96cce78d0a528d92e352fcd48d388b5814d7f",
+      "source": "https://github.com/Rahul-2k4/cosmic-screenshot.git"
     }
   }
 }
