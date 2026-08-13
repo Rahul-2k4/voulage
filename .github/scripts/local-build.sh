@@ -32,6 +32,7 @@ Options:
   --codename <name>          The codename to check or build
   --arch <name>              The arch to check or build
   --stage <name>             The stage to check or build
+  --skip-apt-build-dep       Skip host apt update/build-dep (local builds only)
 
   --help                     Show this message
 
@@ -64,11 +65,12 @@ PACKAGE_REF=""
 DISTRO=""            # ubuntu, debian
 CODENAME=""          # e.g. jammy, noble, bookworm, etc
 STAGE=""             # experimental, unstable, testing, stable
-SUITE="$STAGE"       # experimental, unstable, testing, stable
+SUITE=""             # experimental, unstable, testing, stable
 COMPONENT="main"     # e.g. main, 3_2, 3_1, etc.
 ARCH="amd64"
 
 LOCAL_BUILD="true"
+SKIP_APT_BUILD_DEP="${VOULAGE_SKIP_APT_BUILD_DEP:-false}"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -82,6 +84,7 @@ while [[ $# -gt 0 ]]; do
     --distro)        parse_flag "$1" "$2" DISTRO; shift 2 ;;
     --codename)      parse_flag "$1" "$2" CODENAME; shift 2 ;;
     --stage)         parse_flag "$1" "$2" STAGE; shift 2 ;;
+    --skip-apt-build-dep) SKIP_APT_BUILD_DEP="true"; shift ;;
 
     -h|--help)       usage; exit 0; ;;
     -*|--*)          echo "Unknown option $1"; exit 1;  ;;
@@ -125,6 +128,7 @@ if [ -z "$STAGE" ]; then
   echo "Error: required value for --suite is missing"
   exit 1
 fi
+SUITE="$STAGE"
 
 #### Get extensions
 
@@ -140,6 +144,9 @@ if [ ! -f "$EXTENSION" ]; then
   exit 1
 fi
 source $EXTENSION
+if declare -F archive_cleanup_scripts >/dev/null; then
+  trap archive_cleanup_scripts EXIT
+fi
 
 #### Setup files
 

@@ -65,7 +65,7 @@
       "source": "https://github.com/regolith-linux/fonts-materialdesignicons-webfont.git"
     },
     "fonts-nerd-fonts": {
-      "ref": "debian",
+      "ref": "b167a0ffdc54b0496eb558a61eea25347fc6297b",
       "source": "https://github.com/regolith-linux/fonts-nerd-fonts.git"
     },
     "fonts-source-code-pro-ttf": {

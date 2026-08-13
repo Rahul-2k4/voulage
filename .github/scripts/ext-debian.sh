@@ -4,6 +4,77 @@ set -e
 set -o errexit
 # Extension for Debian repo and package support
 
+# Select a Cargo.toml-declared Rustup toolchain when no explicit override exists.
+prepare_rust_toolchain() {
+  if [ -n "${RUSTUP_TOOLCHAIN:-}" ] || [ -n "${RUSTC:-}" ] || [ -n "${CARGO:-}" ]; then return 0; fi
+  if [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then return 0; fi
+
+  local rust_version edition
+  rust_version=$(sed -nE 's/^[[:space:]]*rust-version[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*(#.*)?$/\1/p' Cargo.toml | head -n 1)
+  if [ -z "$rust_version" ]; then
+    edition=$(sed -nE 's/^[[:space:]]*edition[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*(#.*)?$/\1/p' Cargo.toml | head -n 1)
+    if [ "$edition" = "2024" ]; then
+      rust_version="${VOULAGE_DEFAULT_RUST_TOOLCHAIN:-1.93}"
+    fi
+  fi
+  if [ -z "$rust_version" ] || ! command -v rustup >/dev/null 2>&1; then return 0; fi
+
+  local installed_toolchain
+  installed_toolchain=$(rustup toolchain list 2>/dev/null | awk -v version="$rust_version" '$1 == version || index($1, version "-") == 1 { print $1; exit }')
+  if [ -n "$installed_toolchain" ]; then
+    export RUSTUP_TOOLCHAIN="$installed_toolchain"
+  else
+    echo "Rust toolchain $rust_version declared or selected for Cargo.toml is not installed; using Rustup default" >&2
+  fi
+}
+
+# Build the debuild PATH override for Rust packages without changing the
+# caller's explicit path precedence.
+prepare_debuild_path_args() {
+  local -n path_args_ref=$1
+  local path_entries=()
+  local cargo_bin_path=""
+  local rust_toolchain_bin_path=""
+
+  if [ -n "${DEBUILD_PREPEND_PATH:-}" ]; then
+    path_entries+=("$DEBUILD_PREPEND_PATH")
+  fi
+
+  if [ -f Cargo.toml ] || [ -f rust-toolchain.toml ] || [ -f rust-toolchain ]; then
+    if [ -z "${RUSTC:-}" ] && [ -z "${CARGO:-}" ] && command -v rustup >/dev/null 2>&1; then
+      local rustc_path
+      if [ -n "${RUSTUP_TOOLCHAIN:-}" ]; then
+        rustc_path=$(rustup which --toolchain "$RUSTUP_TOOLCHAIN" rustc 2>/dev/null || true)
+      else
+        rustc_path=$(rustup which rustc 2>/dev/null || true)
+      fi
+      if [ -n "$rustc_path" ]; then
+        rust_toolchain_bin_path=$(dirname "$rustc_path")
+        path_entries+=("$rust_toolchain_bin_path")
+      fi
+    fi
+
+    if [ -n "${CARGO_HOME:-}" ] && [ -d "$CARGO_HOME/bin" ]; then
+      cargo_bin_path="$CARGO_HOME/bin"
+    elif [ -d "$HOME/.cargo/bin" ]; then
+      cargo_bin_path="$HOME/.cargo/bin"
+    elif cargo_path=$(command -v cargo 2>/dev/null); then
+      cargo_bin_path=$(dirname "$cargo_path")
+    fi
+    if [ -n "$cargo_bin_path" ]; then
+      path_entries+=("$cargo_bin_path")
+    fi
+  fi
+
+  if [ "${#path_entries[@]}" -gt 0 ]; then
+    local joined_path
+    joined_path=$(IFS=:; printf "%s" "${path_entries[*]}")
+    path_args_ref=(--prepend-path="$joined_path")
+  else
+    path_args_ref=()
+  fi
+}
+
 #### Debian specific functions
 
 # Update the changelog to specify the target distribution codename
@@ -35,6 +106,10 @@ update_changelog() {
   cd "${PKG_BUILD_PATH:?}/$PACKAGE_NAME"
   version=$(dpkg-parsechangelog --show-field Version)
   set_changelog_identity
+  source_format="debian/source/format"
+  if [ -f "$source_format" ] && grep -Fqx "3.0 (native)" "$source_format"; then
+    printf "%s\n" "3.0 (quilt)" > "$source_format"
+  fi
   echo -e "\033[0;34mUpdating changlog to ${version}-1regolith-$CODENAME for $CODENAME...\033[0m"
   dch --force-distribution --distribution "$CODENAME" --newversion "${version}-1regolith-$CODENAME" "Automated Voulage release"
 
@@ -134,20 +209,57 @@ build_src_package() {
   echo "::group::Building source package $PACKAGE_NAME"
   pushd .
   cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+  prepare_rust_toolchain
 
   echo -e "\033[0;34mSanitizing package folder.\033[0m"
   sanitize_git
 
   echo -e "\033[0;34mBuilding source package.\033[0m"
-  sudo apt update
-  sudo apt build-dep -y .
+  if [ "${LOCAL_BUILD:-false}" == "true" ] && [ "${SKIP_APT_BUILD_DEP:-false}" == "true" ]; then
+    echo "Skipping host apt update/build-dep; caller is responsible for preinstalled build dependencies."
+  else
+    sudo apt update
+    sudo apt build-dep -y .
+  fi
 
   local deb_build_sign=""
   if [ "$LOCAL_BUILD" == "true" ]; then
     deb_build_sign="-us -uc"
   fi
 
-  debuild -S -sa $deb_build_sign
+  local debuild_path_args=()
+  prepare_debuild_path_args debuild_path_args
+
+  local vendor_tar_marker=false
+  local metadata_file
+  for metadata_file in debian/rules debian/Makefile Makefile justfile; do
+    if [ -f "$metadata_file" ] && grep -Fq "vendor.tar" "$metadata_file"; then
+      vendor_tar_marker=true
+      break
+    fi
+  done
+
+  if [ "$vendor_tar_marker" == "true" ]; then
+    mkdir -p debian/source
+    local include_binaries_tmp
+    include_binaries_tmp=$(mktemp debian/source/include-binaries.XXXXXX)
+    if [ -f debian/source/include-binaries ]; then
+      grep -Fvx "vendor.tar" debian/source/include-binaries > "$include_binaries_tmp" || true
+    fi
+    printf "%s\n" "vendor.tar" >> "$include_binaries_tmp"
+    mv "$include_binaries_tmp" debian/source/include-binaries
+
+    local source_options_tmp
+    source_options_tmp=$(mktemp debian/source/options.XXXXXX)
+    if [ -f debian/source/options ]; then
+      grep -Fvx -e "--extend-diff-ignore=^\\.cargo/config.toml$" -e "--extend-diff-ignore=^\\.cargo/config$" debian/source/options > "$source_options_tmp" || true
+    fi
+    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config.toml$" >> "$source_options_tmp"
+    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config$" >> "$source_options_tmp"
+    mv "$source_options_tmp" debian/source/options
+  fi
+
+  debuild "${debuild_path_args[@]}" -S -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
@@ -159,6 +271,7 @@ build_bin_package() {
   echo "::group::Building binary package $PACKAGE_NAME"
   pushd .
   cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+  prepare_rust_toolchain
 
   echo -e "\033[0;34mBuilding binary package.\033[0m"
 
@@ -167,7 +280,10 @@ build_bin_package() {
     deb_build_sign="-us -uc"
   fi
 
-  debuild -b -sa $deb_build_sign
+  local debuild_path_args=()
+  prepare_debuild_path_args debuild_path_args
+
+  debuild "${debuild_path_args[@]}" -b -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
@@ -232,32 +348,37 @@ publish() {
   fi
 
   DEB_CONTROL_FILE="$PKG_BUILD_PATH/$PACKAGE_NAME/debian/control"
-  ALL_ARCH="$ARCH,all"
-
   echo -e "\033[0;34mPublishing binary package $debian_package_name into $PKG_PUBLISH_PATH.\033[0m"
 
-  for target_arch in $(echo $ALL_ARCH | sed "s/,/ /g"); do
-    cat "$DEB_CONTROL_FILE" | grep ^Package: | cut -d' ' -f2 | while read -r bin_pkg; do
-      DEB_BIN_PKG_PATH="$(pwd)/${bin_pkg}_${version}_${target_arch}.deb"
-
-      if [ -f "$DEB_BIN_PKG_PATH" ]; then
-        mkdir -p $PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE
-        echo "  Copying ${bin_pkg}_${version}_${target_arch}.deb"
-        cp "$DEB_BIN_PKG_PATH" "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE"
-
-        if [ "$LOCAL_BUILD" == "false" ] && [ "$SUITE" == "stable" ]; then
-          mkdir -p "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT"
-          cd "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT" >/dev/null 2>&1
-          ln "../$SUITE/${bin_pkg}_${version}_${target_arch}.deb" .
-          cd - >/dev/null 2>&1
-        fi
-
-        echo "CHLOG:Published ${bin_pkg}_${version}_${target_arch}.deb in $DISTRO/$CODENAME/$STAGE from $PKG_LINE"
+  awk '/^Package:/ { package = $2 } /^Architecture:/ { print package, $2 }' "$DEB_CONTROL_FILE" |
+    while read -r bin_pkg bin_arch; do
+      if [ "$bin_arch" == "all" ]; then
+        target_arches=all
       else
-        echo -e "\033[0;31m  Package $bin_pkg does not exist for $target_arch.\033[0m"
+        target_arches=$ARCH
       fi
+
+      for target_arch in $target_arches; do
+        DEB_BIN_PKG_PATH="$(pwd)/${bin_pkg}_${version}_${target_arch}.deb"
+
+        if [ -f "$DEB_BIN_PKG_PATH" ]; then
+          mkdir -p $PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE
+          echo "  Copying ${bin_pkg}_${version}_${target_arch}.deb"
+          cp "$DEB_BIN_PKG_PATH" "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$SUITE"
+
+          if [ "$LOCAL_BUILD" == "false" ] && [ "$SUITE" == "stable" ]; then
+            mkdir -p "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT"
+            cd "$PKG_PUBLISH_PATH/$DISTRO/$CODENAME/$COMPONENT" >/dev/null 2>&1
+            ln "../$SUITE/${bin_pkg}_${version}_${target_arch}.deb" .
+            cd - >/dev/null 2>&1
+          fi
+
+          echo "CHLOG:Published ${bin_pkg}_${version}_${target_arch}.deb in $DISTRO/$CODENAME/$STAGE from $PKG_LINE"
+        else
+          echo -e "\033[0;31m  Package $bin_pkg does not exist for $target_arch.\033[0m"
+        fi
+      done
     done
-  done
 
   echo "::endgroup::"
 }
@@ -266,8 +387,14 @@ archive_setup_scripts() {
   # Following allows for internal dependencies
 
   echo "::group::Setting up archive apt list"
+  if [ "$LOCAL_BUILD" == "true" ]; then
+    echo -e "\033[0;34mSkipping archive apt setup for local build.\033[0m"
+    echo "::endgroup::"
+    return 0
+  fi
+
   rm /tmp/Release || true
-  wget -P /tmp "http://archive.regolith-desktop.com/$DISTRO/$SUITE/dists/$CODENAME/Release" || true
+  wget --timeout=10 --tries=1 -P /tmp "http://archive.regolith-desktop.com/$DISTRO/$SUITE/dists/$CODENAME/Release" || true
 
   if [ -s /tmp/Release ]; then
     rm /tmp/Release

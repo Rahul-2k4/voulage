@@ -8,6 +8,22 @@
       "ref": "regolith/48",
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
+    "regolith-displayd": {
+      "ref": "ae505b287a5bcf9ec91f7145dbdfd8ff5460e502",
+      "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
+    },
+    "regolith-inputd": {
+      "ref": "28ed01d636955901efa275bd72c85277407e908d",
+      "source": "https://github.com/Rahul-2k4/regolith-inputd.git"
+    },
+    "regolith-wm-config": {
+      "ref": "f7120d9007f4f0de0ff668475843a872507bcb16",
+      "source": "https://github.com/Rahul-2k4/regolith-wm-config.git"
+    },
+    "regolith-session": {
+      "ref": "c87640b5f2d4d050bf8366d3c5cb5c9fac81704c",
+      "source": "https://github.com/Rahul-2k4/regolith-session.git"
+    },
     "regolith-debootstick-setup": {
       "ref": "main",
       "source": "https://github.com/regolith-linux/regolith-debootstick-setup.git"
@@ -16,6 +32,14 @@
       "ref": "packaging/v1.10-regolith",
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
+    "cosmic-osd": {
+      "ref": "5441fecabc90e4112c1563c7749ebeaf7f130c00",
+      "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
+    },
+    "cosmic-idle": {
+      "ref": "c95d066b5b640509a6369634b669ca60dc50e168",
+      "source": "https://github.com/pop-os/cosmic-idle.git"
+    },
     "cosmic-session": {
       "ref": "a14abe378a513c6c5499b52b0d4d1afe50a41644",
       "source": "https://github.com/Rahul-2k4/cosmic-session.git"
@@ -23,6 +47,78 @@
     "cosmic-settings-daemon": {
       "ref": "7c02682178d18b286a0e66a92ca9eb87b0e960e7",
       "source": "https://github.com/Rahul-2k4/cosmic-settings-daemon.git"
+    },
+    "cosmic-bg": {
+      "ref": "ed65f7d3dc9e3d4af3cd65244a966e01bff0f730",
+      "source": "https://github.com/pop-os/cosmic-bg.git"
+    },
+    "cosmic-settings": {
+      "ref": "ca9b7aa138ea7925296d49615a0fb298cfa01460",
+      "source": "https://github.com/pop-os/cosmic-settings"
+    },
+    "cosmic-app-library": {
+      "ref": "3fbc6975fdd9062e88e1773d11647cba04de6bb5",
+      "source": "https://github.com/Rahul-2k4/cosmic-app-library.git"
+    },
+    "cosmic-applets": {
+      "ref": "e544cb54c242fecbe9399fcb3dd61d9ac19e1214",
+      "source": "https://github.com/pop-os/cosmic-applets.git"
+    },
+    "cosmic-comp": {
+      "ref": "a674153cda267d83b64f6bc53972119eef2e3fcb",
+      "source": "https://github.com/Rahul-2k4/cosmic-comp.git"
+    },
+    "cosmic-files": {
+      "ref": "5278c67957be14a47aa94e3e69b9765040360211",
+      "source": "https://github.com/pop-os/cosmic-files.git"
+    },
+    "cosmic-greeter": {
+      "ref": "2290aae5e2e078a1d79c6ec1a27cdf3ccc366a45",
+      "source": "https://github.com/pop-os/cosmic-greeter.git"
+    },
+    "cosmic-icons": {
+      "ref": "b78b059636ed967ad7c6f120709c7d29b2bafac1",
+      "source": "https://github.com/pop-os/cosmic-icons.git"
+    },
+    "cosmic-launcher": {
+      "ref": "61ab43a71a0e684a76b0f7a40199c585862148a8",
+      "source": "https://github.com/pop-os/cosmic-launcher.git"
+    },
+    "cosmic-notifications": {
+      "ref": "7c723b7705ec77b1ad5396a1baa9ae1c0cb5a0da",
+      "source": "https://github.com/pop-os/cosmic-notifications.git"
+    },
+    "cosmic-panel": {
+      "ref": "db97fd5974702a966cfaf9bd342ab7a4c80f55fa",
+      "source": "https://github.com/pop-os/cosmic-panel.git"
+    },
+    "cosmic-randr": {
+      "ref": "6e8e795970fa06d434af22775e415b517f7552d3",
+      "source": "https://github.com/pop-os/cosmic-randr.git"
+    },
+    "cosmic-screenshot": {
+      "ref": "d6ef210e981d045fec5022416b85edd0afc03e16",
+      "source": "https://github.com/pop-os/cosmic-screenshot.git"
+    },
+    "xdg-desktop-portal-cosmic": {
+      "ref": "8ff215a51716333e41bd55acfe81383e15e26d35",
+      "source": "https://github.com/Rahul-2k4/xdg-desktop-portal-cosmic.git"
+    },
+    "cosmic-workspaces": {
+      "ref": "6d90fb4f453b5ad68ba94fdf534d66085a7e4f52",
+      "source": "https://github.com/pop-os/cosmic-workspaces.git"
+    },
+    "pop-fonts": {
+      "ref": "2da23d5e76bf724c49875e8fd328e1fd5a6de80e",
+      "source": "https://github.com/pop-os/fonts.git"
+    },
+    "pop-icon-theme": {
+      "ref": "1a575a8e99b4ae629b9b16543a3a04d148632ba9",
+      "source": "https://github.com/pop-os/icon-theme.git"
+    },
+    "pop-launcher": {
+      "ref": "a332a3a73316a3595816dd02fe426a1d3543167a",
+      "source": "https://github.com/pop-os/launcher.git"
     },
     "ubiquity-slideshow-regolith": null
   }
