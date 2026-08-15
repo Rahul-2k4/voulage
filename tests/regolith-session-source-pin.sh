@@ -21,7 +21,7 @@ expected = {
     ),
     "regolith-displayd": (
         "https://github.com/Rahul-2k4/regolith-displayd.git",
-        "5b89e5bd479cc633cfe37dbe1d279c15979a7619",
+        "294b21961829621f8c466f20e2fed802b3c0e97b",
     ),
 }
 
