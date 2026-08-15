@@ -13,7 +13,7 @@ packages = model.get("packages", model)
 expected = {
     "regolith-session": (
         "https://github.com/Rahul-2k4/regolith-session.git",
-        "7fb72a8d93e8b33fc6bfbca9292398252003b477",
+        "831596f8f054a6904b0846b6a899912c6c13d465",
     ),
     "regolith-inputd": (
         "https://github.com/Rahul-2k4/regolith-inputd.git",
