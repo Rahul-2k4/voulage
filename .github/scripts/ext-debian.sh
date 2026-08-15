@@ -6,6 +6,17 @@ set -o errexit
 
 #### Debian specific functions
 
+configure_displayd_cargo() {
+  if [ $PACKAGE_NAME != "regolith-displayd" ] || ! grep -q "^version = 4$" Cargo.lock; then
+    return
+  fi
+  local nightly_cargo
+  nightly_cargo=$(rustup which cargo --toolchain nightly)
+  export CARGO="$nightly_cargo"
+  export PATH="$(dirname "$nightly_cargo"):$PATH"
+  export CARGO_VENDOR_FLAGS="-Znext-lockfile-bump"
+  export DEBUILD_PREPEND_PATH="$(dirname "$nightly_cargo")"
+}
 # Update the changelog to specify the target distribution codename
 set_changelog_identity() {
   local maintainer maintainer_email maintainer_name
@@ -151,7 +162,9 @@ build_src_package() {
     deb_build_sign="-us -uc"
   fi
 
-  debuild -S -sa $deb_build_sign
+  configure_displayd_cargo
+
+  debuild ${DEBUILD_PREPEND_PATH:+--prepend-path="$DEBUILD_PREPEND_PATH"} -S -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
@@ -171,7 +184,9 @@ build_bin_package() {
     deb_build_sign="-us -uc"
   fi
 
-  debuild -b -sa $deb_build_sign
+  configure_displayd_cargo
+
+  debuild ${DEBUILD_PREPEND_PATH:+--prepend-path="$DEBUILD_PREPEND_PATH"} -b -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
