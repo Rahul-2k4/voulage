@@ -10,6 +10,8 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 PACKAGE_ROOT="$TMP_DIR/package"
 MOCK_BIN="$TMP_DIR/bin"
 CAPTURE="$TMP_DIR/dch-capture"
+VERSION_FILE="$TMP_DIR/version"
+VERSION_CAPTURE="$TMP_DIR/version-capture"
 mkdir -p "$PACKAGE_ROOT/debian" "$MOCK_BIN"
 
 printf '%s\n' \
@@ -25,11 +27,19 @@ printf '%s\n' \
 
 cat > "$MOCK_BIN/dpkg-parsechangelog" <<'EOF'
 #!/bin/bash
-printf '%s\n' 1.2.3
+cat "$VERSION_FILE"
 EOF
 cat > "$MOCK_BIN/dch" <<'EOF'
 #!/bin/bash
-printf '%s\n' "${DEBFULLNAME-}" "${DEBEMAIL-}" "${EMAIL-}" > "$DCH_CAPTURE"
+for ((i = 1; i <= $#; i++)); do
+  if [ "${!i}" = "--newversion" ]; then
+    j=$((i + 1))
+    printf '%s\n' "${!j}" >> "$VERSION_CAPTURE"
+    printf '%s\n%s\n%s\n' "${DEBFULLNAME-}" "${DEBEMAIL-}" "${EMAIL-}" > "$DCH_CAPTURE"
+    exit 0
+  fi
+done
+exit 1
 EOF
 chmod +x "$MOCK_BIN/dpkg-parsechangelog" "$MOCK_BIN/dch"
 
@@ -39,6 +49,8 @@ export PKG_BUILD_PATH="$TMP_DIR"
 export PACKAGE_NAME=package
 export CODENAME=resolute
 export DCH_CAPTURE="$CAPTURE"
+export VERSION_FILE
+export VERSION_CAPTURE
 
 assert_identity() {
   local expected_name=$1
@@ -53,8 +65,31 @@ assert_identity() {
 }
 
 unset DEBEMAIL DEBFULLNAME EMAIL
+printf '%s\n' '1.2.3-1' > "$VERSION_FILE"
 update_changelog
 assert_identity 'Regolith Linux' 'regolith.linux@gmail.com'
+
+run_version_case() {
+  local input=$1
+  local codename=$2
+  local expected=$3
+  local expected_calls=$4
+  printf '%s\n' "$input" > "$VERSION_FILE"
+  : > "$VERSION_CAPTURE"
+  : > "$CAPTURE"
+  CODENAME="$codename" update_changelog
+  if [ "$(wc -l < "$VERSION_CAPTURE")" -ne "$expected_calls" ]; then
+    printf 'unexpected dch call count for %s\n' "$input" >&2
+    return 1
+  fi
+  if [ "$expected_calls" -eq 1 ]; then
+    test "$(cat "$VERSION_CAPTURE")" = "$expected"
+  fi
+}
+
+run_version_case '0.1.0-1' resolute '0.1.0-1-1regolith-resolute' 1
+run_version_case '0.1.0-1-1regolith-resolute' resolute '' 0
+run_version_case '0.1.0-1-1regolith-trixie' resolute '0.1.0-1-1regolith-resolute' 1
 
 printf '%s\n' \
   'Source: fixture-package' \

@@ -99,6 +99,26 @@ set_changelog_identity() {
     export DEBEMAIL="$maintainer_email"
   fi
 }
+compose_regolith_version() {
+  local version=$1
+  local codename=$2
+  local base_version
+
+  case "$version" in
+    *-1regolith-*)
+      base_version="${version%%-1regolith-*}"
+      ;;
+    *)
+      base_version="$version"
+      if [[ ! "$base_version" =~ ^.+-[0-9]+$ ]]; then
+        base_version="${base_version}-1"
+      fi
+      ;;
+  esac
+
+  printf '%s-1regolith-%s\n' "$base_version" "$codename"
+}
+
 # Update the changelog to specify the target distribution codename
 update_changelog() {
   # set -x
@@ -110,23 +130,7 @@ update_changelog() {
   if [ -f "$source_format" ] && grep -Fqx "3.0 (native)" "$source_format"; then
     printf "%s\n" "3.0 (quilt)" > "$source_format"
   fi
-  case "$version" in
-    *-1regolith-*)
-      if [[ "$version" =~ ^(.+)-([0-9]+)-1regolith-.+$ ]]; then
-        base_version="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
-      else
-        base_version="${version%-1regolith-*}-1"
-      fi
-      ;;
-    *)
-      if [[ "$version" =~ ^.+-[0-9]+$ ]]; then
-        base_version="$version"
-      else
-        base_version="${version}-1"
-      fi
-      ;;
-  esac
-  new_version="${base_version}-1regolith-$CODENAME"
+  new_version=$(compose_regolith_version "$version" "$CODENAME")
   echo -e "\033[0;34mUpdating changlog to ${new_version} for $CODENAME...\033[0m"
   if [ "$new_version" != "$version" ]; then
     dch --force-distribution --distribution "$CODENAME" --newversion "$new_version" "Automated Voulage release"
