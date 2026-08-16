@@ -90,6 +90,12 @@ run_version_case() {
 run_version_case '0.1.0-1' resolute '0.1.0-1-1regolith-resolute' 1
 run_version_case '0.1.0-1-1regolith-resolute' resolute '' 0
 run_version_case '0.1.0-1-1regolith-trixie' resolute '0.1.0-1-1regolith-resolute' 1
+run_version_case '0.1.0-0ubuntu1' resolute '0.1.0-0ubuntu1-1regolith-resolute' 1
+run_version_case '0.1.0-0ubuntu1-1regolith-resolute' resolute '' 0
+run_version_case '0.1.0-1+b1' resolute '0.1.0-1+b1-1regolith-resolute' 1
+run_version_case '0.1.0-1+b1-1regolith-trixie' resolute '0.1.0-1+b1-1regolith-resolute' 1
+run_version_case '0.1.0-1~exp1' resolute '0.1.0-1~exp1-1regolith-resolute' 1
+run_version_case '0.1.0-1~exp1-1regolith-resolute' resolute '' 0
 
 printf '%s\n' \
   'Source: fixture-package' \
@@ -97,6 +103,7 @@ printf '%s\n' \
   'Priority: optional' \
   'Standards-Version: 4.6.0' > "$PACKAGE_ROOT/debian/control"
 unset DEBEMAIL DEBFULLNAME EMAIL
+printf '%s\n' '1.2.3-1' > "$VERSION_FILE"
 update_changelog
 assert_identity 'Regolith Linux' 'regolith.linux@gmail.com'
 

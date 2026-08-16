@@ -110,7 +110,7 @@ compose_regolith_version() {
       ;;
     *)
       base_version="$version"
-      if [[ ! "$base_version" =~ ^.+-[0-9]+$ ]]; then
+      if [[ ! "$base_version" =~ ^.+-[0-9][[:alnum:].+~:]*$ ]]; then
         base_version="${base_version}-1"
       fi
       ;;
