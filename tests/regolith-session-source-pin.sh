@@ -23,6 +23,10 @@ expected = {
         "https://github.com/Rahul-2k4/regolith-displayd.git",
         "817becd9dc7e6a12f13f3f30f663555212ae78fa",
     ),
+    "cosmolith": (
+        "https://github.com/Rahul-2k4/cosmolith.git",
+        "296d576b8fabaf23535980975cf825337010e4e5",
+    ),
 }
 
 for name, (source, ref) in expected.items():
