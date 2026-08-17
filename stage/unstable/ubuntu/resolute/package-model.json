@@ -9,7 +9,7 @@
       "source": "https://github.com/regolith-linux/sway-regolith.git"
     },
     "cosmic-osd": {
-      "ref": "rahul/voulage-cosmic-osd-461ff24",
+      "ref": "codex/cosmic-osd-remove-active-index-20260818",
       "source": "https://github.com/Rahul-2k4/cosmic-osd.git"
     },
     "cosmic-idle": {
