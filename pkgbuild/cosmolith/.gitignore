@@ -1,0 +1,4 @@
+/vendor/
+/vendor.tar
+/target/
+/debian/.cargo/

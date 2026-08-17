@@ -1,0 +1,11 @@
+cosmolith (0.1.0-1-1regolith-resolute) resolute; urgency=medium
+
+  * Automated Voulage release
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Mon, 17 Aug 2026 02:11:35 +0530
+
+cosmolith (0.1.0-1) resolute; urgency=medium
+
+  * Initial Regolith package for the COSMIC configuration daemon.
+
+ -- Regolith Linux <regolith.linux@gmail.com>  Sat, 08 Aug 2026 12:00:00 +0000
