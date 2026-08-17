@@ -5,7 +5,7 @@
       "source": "https://github.com/regolith-linux/regolith-control-center.git"
     },
     "regolith-displayd": {
-      "ref": "ae505b287a5bcf9ec91f7145dbdfd8ff5460e502",
+      "ref": "codex/displayd-cosmic-kanshi-guard-20260818",
       "source": "https://github.com/Rahul-2k4/regolith-displayd.git"
     },
     "regolith-inputd": {
