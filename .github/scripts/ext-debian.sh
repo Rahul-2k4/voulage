@@ -75,6 +75,14 @@ prepare_debuild_path_args() {
   fi
 }
 
+prepare_debuild_feature_args() {
+  local -n feature_args_ref=$1
+  feature_args_ref=()
+  if [ -n "${CARGO_FEATURES:-}" ]; then
+    feature_args_ref+=("-eCARGO_FEATURES=${CARGO_FEATURES}")
+  fi
+}
+
 #### Debian specific functions
 
 # Update the changelog to specify the target distribution codename
@@ -250,6 +258,8 @@ build_src_package() {
 
   local debuild_path_args=()
   prepare_debuild_path_args debuild_path_args
+  local debuild_feature_args=()
+  prepare_debuild_feature_args debuild_feature_args
 
   local vendor_tar_marker=false
   local metadata_file
@@ -280,7 +290,7 @@ build_src_package() {
     mv "$source_options_tmp" debian/source/options
   fi
 
-  debuild "${debuild_path_args[@]}" -S -sa $deb_build_sign
+  debuild "${debuild_path_args[@]}" "${debuild_feature_args[@]}" -S -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
@@ -303,8 +313,10 @@ build_bin_package() {
 
   local debuild_path_args=()
   prepare_debuild_path_args debuild_path_args
+  local debuild_feature_args=()
+  prepare_debuild_feature_args debuild_feature_args
 
-  debuild "${debuild_path_args[@]}" -b -sa $deb_build_sign
+  debuild "${debuild_path_args[@]}" "${debuild_feature_args[@]}" -b -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
