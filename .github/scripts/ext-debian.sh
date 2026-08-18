@@ -136,6 +136,7 @@ prepare_source_package() {
   rm -rf vendor
   "${CARGO:-cargo}" vendor --locked --offline vendor > .cargo/config
   tar --sort=name --mtime="UTC 1970-01-01" --owner=0 --group=0 --numeric-owner -cf vendor.tar vendor .cargo/config
+  rm -rf vendor
   popd >/dev/null
 }
 
