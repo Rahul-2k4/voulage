@@ -79,12 +79,16 @@ update_changelog
 assert_identity 'Regolith Linux' 'regolith.linux@gmail.com'
 
 assert_hook_before_stage() {
+  local binary_line
   local caller hook_line stage_line
   for caller in local-build.sh main.sh ci-build.sh; do
     hook_line=$(grep -n "^[[:space:]]*prepare_source_package$" "$REPO_ROOT/.github/scripts/$caller" | cut -d: -f1)
     stage_line=$(grep -n "^[[:space:]]*stage_source$" "$REPO_ROOT/.github/scripts/$caller" | cut -d: -f1)
     [[ -n "$hook_line" && -n "$stage_line" && "$hook_line" -lt "$stage_line" ]]
   done
+  binary_line=$(grep -n '^prepare_binary_package()' "$REPO_ROOT/.github/scripts/ext-debian.sh" | cut -d: -f1)
+  [[ -n "$binary_line" ]]
+  grep -n '^  prepare_binary_package$' "$REPO_ROOT/.github/scripts/ext-debian.sh" | awk -F: -v line="$binary_line" '$1 > line { found = 1 } END { exit !found }'
 }
 
 assert_hook_before_stage
@@ -118,4 +122,28 @@ grep -Fx -- "--extend-diff-ignore=^\\.cargo/config$" "$PACKAGE_ROOT/debian/sourc
 grep -F "true|metadata --locked --offline --format-version 1 --no-deps --features cosmic" "$CARGO_CAPTURE"
 grep -F "true|vendor --locked --offline vendor" "$CARGO_CAPTURE"
 
-printf 'test-ext-debian: changelog identity and pre-source vendoring passed\n'
+rm -rf "$PACKAGE_ROOT/vendor" "$PACKAGE_ROOT/.cargo"
+prepare_binary_package
+test -f "$PACKAGE_ROOT/vendor/mock-crate/lib.rs"
+test -f "$PACKAGE_ROOT/.cargo/config"
+test "$(cat "$PACKAGE_ROOT/.cargo/config")" = '[source.vendored-sources]'
+[[ "$VOULAGE_DEBUILD_NO_PRE_CLEAN" == true ]]
+
+rm -rf "$PACKAGE_ROOT/vendor" "$PACKAGE_ROOT/.cargo"
+rm -f "$PACKAGE_ROOT/vendor.tar"
+if prepare_binary_package; then
+  echo 'prepare_binary_package unexpectedly succeeded without vendor.tar' >&2
+  exit 1
+fi
+test ! -e "$PACKAGE_ROOT/vendor"
+[[ "$VOULAGE_DEBUILD_NO_PRE_CLEAN" == false ]]
+
+printf 'not a tar archive\n' > "$PACKAGE_ROOT/vendor.tar"
+if prepare_binary_package; then
+  echo 'prepare_binary_package unexpectedly succeeded with a corrupt archive' >&2
+  exit 1
+fi
+test ! -e "$PACKAGE_ROOT/vendor"
+[[ "$VOULAGE_DEBUILD_NO_PRE_CLEAN" == false ]]
+
+printf 'test-ext-debian: changelog identity, pre-source vendoring, and binary restore passed\n'

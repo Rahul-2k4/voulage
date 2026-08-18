@@ -324,12 +324,64 @@ build_src_package() {
   echo "::endgroup::"
 }
 
+# Restore generated Rust inputs removed after source archive creation.
+prepare_binary_package() {
+  VOULAGE_DEBUILD_NO_PRE_CLEAN=false
+  pushd . >/dev/null
+  cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+
+  if [ ! -f Cargo.toml ] || ! source_has_vendor_tar_marker; then
+    popd >/dev/null
+    return 0
+  fi
+
+  export CARGO_NET_OFFLINE=true
+  prepare_rust_toolchain
+
+  if [ ! -f vendor.tar ]; then
+    echo "Error: vendor.tar is required for the offline Rust binary build" >&2
+    popd >/dev/null
+    return 1
+  fi
+
+  local restore_tmp
+  restore_tmp=$(mktemp -d .vendor-restore.XXXXXX)
+  if ! tar --no-same-owner --no-same-permissions -xf vendor.tar -C "$restore_tmp"; then
+    rm -rf "$restore_tmp"
+    echo "Error: could not extract vendor.tar for the offline Rust binary build" >&2
+    popd >/dev/null
+    return 1
+  fi
+  if [ ! -d "$restore_tmp/vendor" ] || [ ! -d "$restore_tmp/.cargo" ]; then
+    rm -rf "$restore_tmp"
+    echo "Error: vendor.tar does not contain the vendored source and Cargo config" >&2
+    popd >/dev/null
+    return 1
+  fi
+  if [ ! -f "$restore_tmp/.cargo/config" ] && [ ! -f "$restore_tmp/.cargo/config.toml" ]; then
+    rm -rf "$restore_tmp"
+    echo "Error: vendor.tar does not contain a Cargo config" >&2
+    popd >/dev/null
+    return 1
+  fi
+
+  rm -rf vendor
+  mkdir -p .cargo
+  rm -f .cargo/config .cargo/config.toml
+  mv "$restore_tmp/vendor" vendor
+  cp -a "$restore_tmp/.cargo/." .cargo/
+  rm -rf "$restore_tmp"
+  VOULAGE_DEBUILD_NO_PRE_CLEAN=true
+  popd >/dev/null
+}
+
 build_bin_package() {
   set -e
 
   echo "::group::Building binary package $PACKAGE_NAME"
   pushd .
   cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+  prepare_binary_package
   prepare_rust_toolchain
 
   echo -e "\033[0;34mBuilding binary package.\033[0m"
@@ -343,8 +395,12 @@ build_bin_package() {
   prepare_debuild_path_args debuild_path_args
   local debuild_feature_args=()
   prepare_debuild_feature_args debuild_feature_args
+  local debuild_clean_args=()
+  if [ "${VOULAGE_DEBUILD_NO_PRE_CLEAN:-false}" == "true" ]; then
+    debuild_clean_args+=(--no-pre-clean)
+  fi
 
-  debuild "${debuild_path_args[@]}" "${debuild_feature_args[@]}" -b -sa $deb_build_sign
+  debuild "${debuild_path_args[@]}" "${debuild_feature_args[@]}" "${debuild_clean_args[@]}" -b -sa $deb_build_sign
 
   popd
   echo "::endgroup::"
