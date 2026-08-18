@@ -83,6 +83,63 @@ prepare_debuild_feature_args() {
   fi
 }
 
+source_has_vendor_tar_marker() {
+  local metadata_file
+  for metadata_file in debian/rules debian/Makefile Makefile justfile; do
+    if [ -f "$metadata_file" ] && grep -Fq "vendor.tar" "$metadata_file"; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+# Prepare generated Rust source inputs before stage_source creates .orig.tar.gz.
+prepare_source_package() {
+  pushd . >/dev/null
+  cd "$PKG_BUILD_PATH/$PACKAGE_NAME" || exit
+
+  if [ ! -f Cargo.toml ]; then
+    popd >/dev/null
+    return 0
+  fi
+  if ! source_has_vendor_tar_marker; then
+    popd >/dev/null
+    return 0
+  fi
+  export CARGO_NET_OFFLINE=true
+
+  prepare_rust_toolchain
+  mkdir -p debian/source .cargo
+  local include_binaries_tmp
+  include_binaries_tmp=$(mktemp debian/source/include-binaries.XXXXXX)
+  if [ -f debian/source/include-binaries ]; then
+    grep -Fvx "vendor.tar" debian/source/include-binaries > "$include_binaries_tmp" || true
+  fi
+  printf "%s\n" "vendor.tar" >> "$include_binaries_tmp"
+  mv "$include_binaries_tmp" debian/source/include-binaries
+
+  local source_options_tmp
+  source_options_tmp=$(mktemp debian/source/options.XXXXXX)
+  if [ -f debian/source/options ]; then
+    grep -Fvx -e "--extend-diff-ignore=^\\.cargo/config.toml$" -e "--extend-diff-ignore=^\\.cargo/config$" debian/source/options > "$source_options_tmp" || true
+  fi
+  printf "%s\n" "--extend-diff-ignore=^\\.cargo/config.toml$" >> "$source_options_tmp"
+  printf "%s\n" "--extend-diff-ignore=^\\.cargo/config$" >> "$source_options_tmp"
+  mv "$source_options_tmp" debian/source/options
+
+  local cargo_metadata_args=(metadata --locked --offline --format-version 1 --no-deps)
+  if [ -n "${CARGO_FEATURES:-}" ]; then
+    cargo_metadata_args+=(--features "$CARGO_FEATURES")
+  fi
+  "${CARGO:-cargo}" "${cargo_metadata_args[@]}" >/dev/null
+
+  rm -rf vendor
+  "${CARGO:-cargo}" vendor --locked --offline vendor > .cargo/config
+  tar --sort=name --mtime="UTC 1970-01-01" --owner=0 --group=0 --numeric-owner -cf vendor.tar vendor .cargo/config
+  rm -rf vendor
+  popd >/dev/null
+}
+
 #### Debian specific functions
 
 # Update the changelog to specify the target distribution codename
@@ -260,35 +317,6 @@ build_src_package() {
   prepare_debuild_path_args debuild_path_args
   local debuild_feature_args=()
   prepare_debuild_feature_args debuild_feature_args
-
-  local vendor_tar_marker=false
-  local metadata_file
-  for metadata_file in debian/rules debian/Makefile Makefile justfile; do
-    if [ -f "$metadata_file" ] && grep -Fq "vendor.tar" "$metadata_file"; then
-      vendor_tar_marker=true
-      break
-    fi
-  done
-
-  if [ "$vendor_tar_marker" == "true" ]; then
-    mkdir -p debian/source
-    local include_binaries_tmp
-    include_binaries_tmp=$(mktemp debian/source/include-binaries.XXXXXX)
-    if [ -f debian/source/include-binaries ]; then
-      grep -Fvx "vendor.tar" debian/source/include-binaries > "$include_binaries_tmp" || true
-    fi
-    printf "%s\n" "vendor.tar" >> "$include_binaries_tmp"
-    mv "$include_binaries_tmp" debian/source/include-binaries
-
-    local source_options_tmp
-    source_options_tmp=$(mktemp debian/source/options.XXXXXX)
-    if [ -f debian/source/options ]; then
-      grep -Fvx -e "--extend-diff-ignore=^\\.cargo/config.toml$" -e "--extend-diff-ignore=^\\.cargo/config$" debian/source/options > "$source_options_tmp" || true
-    fi
-    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config.toml$" >> "$source_options_tmp"
-    printf "%s\n" "--extend-diff-ignore=^\\.cargo/config$" >> "$source_options_tmp"
-    mv "$source_options_tmp" debian/source/options
-  fi
 
   debuild "${debuild_path_args[@]}" "${debuild_feature_args[@]}" -S -sa $deb_build_sign
 

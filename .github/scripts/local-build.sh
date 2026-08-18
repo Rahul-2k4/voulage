@@ -168,6 +168,9 @@ setup
 checkout
 update_changelog
 if dist_valid; then
+  if declare -F prepare_source_package >/dev/null; then
+    prepare_source_package
+  fi
   stage_source
   build_src_package
   build_bin_package

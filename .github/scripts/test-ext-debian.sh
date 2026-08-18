@@ -10,6 +10,7 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 PACKAGE_ROOT="$TMP_DIR/package"
 MOCK_BIN="$TMP_DIR/bin"
 CAPTURE="$TMP_DIR/dch-capture"
+CARGO_CAPTURE="$TMP_DIR/cargo-capture"
 mkdir -p "$PACKAGE_ROOT/debian" "$MOCK_BIN"
 
 printf '%s\n' \
@@ -33,12 +34,24 @@ printf '%s\n' "${DEBFULLNAME-}" "${DEBEMAIL-}" "${EMAIL-}" > "$DCH_CAPTURE"
 EOF
 chmod +x "$MOCK_BIN/dpkg-parsechangelog" "$MOCK_BIN/dch"
 
+cat > "$MOCK_BIN/cargo" <<'EOF'
+#!/bin/bash
+printf '%s|%s\n' "${CARGO_NET_OFFLINE-}" "$*" >> "$CARGO_CAPTURE"
+if [ "$1" = "vendor" ]; then
+  mkdir -p vendor/mock-crate
+  printf 'fixture\n' > vendor/mock-crate/lib.rs
+  printf '[source.vendored-sources]\n'
+fi
+EOF
+chmod +x "$MOCK_BIN/cargo"
+export CARGO_CAPTURE
 source "$REPO_ROOT/.github/scripts/ext-debian.sh"
 export PATH="$MOCK_BIN:$PATH"
 export PKG_BUILD_PATH="$TMP_DIR"
 export PACKAGE_NAME=package
 export CODENAME=resolute
 export DCH_CAPTURE="$CAPTURE"
+export CARGO_CAPTURE
 
 assert_identity() {
   local expected_name=$1
@@ -65,4 +78,44 @@ unset DEBEMAIL DEBFULLNAME EMAIL
 update_changelog
 assert_identity 'Regolith Linux' 'regolith.linux@gmail.com'
 
-printf 'test-ext-debian: changelog identity fallback passed\n'
+assert_hook_before_stage() {
+  local caller hook_line stage_line
+  for caller in local-build.sh main.sh ci-build.sh; do
+    hook_line=$(grep -n "^[[:space:]]*prepare_source_package$" "$REPO_ROOT/.github/scripts/$caller" | cut -d: -f1)
+    stage_line=$(grep -n "^[[:space:]]*stage_source$" "$REPO_ROOT/.github/scripts/$caller" | cut -d: -f1)
+    [[ -n "$hook_line" && -n "$stage_line" && "$hook_line" -lt "$stage_line" ]]
+  done
+}
+
+assert_hook_before_stage
+
+rm -f "$CARGO_CAPTURE"
+rm -f "$PACKAGE_ROOT/Cargo.toml"
+printf 'vendor.tar\n' > "$PACKAGE_ROOT/debian/rules"
+unset CARGO
+prepare_source_package
+[[ ! -s "$CARGO_CAPTURE" ]]
+[[ ! -e "$PACKAGE_ROOT/vendor.tar" ]]
+
+printf '[package]\nname = "fixture"\nversion = "0.1.0"\n' > "$PACKAGE_ROOT/Cargo.toml"
+rm -f "$PACKAGE_ROOT/debian/rules" "$PACKAGE_ROOT/debian/Makefile" "$PACKAGE_ROOT/Makefile" "$PACKAGE_ROOT/justfile"
+: > "$CARGO_CAPTURE"
+prepare_source_package
+[[ ! -s "$CARGO_CAPTURE" ]]
+[[ ! -e "$PACKAGE_ROOT/vendor.tar" ]]
+
+printf 'vendor.tar\n' > "$PACKAGE_ROOT/Makefile"
+
+export CARGO="$MOCK_BIN/cargo"
+export CARGO_FEATURES=cosmic
+prepare_source_package
+test -f "$PACKAGE_ROOT/vendor.tar"
+tar tf "$PACKAGE_ROOT/vendor.tar" | grep -Fx "vendor/mock-crate/lib.rs"
+tar tf "$PACKAGE_ROOT/vendor.tar" | grep -Fx ".cargo/config"
+grep -Fx "vendor.tar" "$PACKAGE_ROOT/debian/source/include-binaries"
+grep -Fx -- "--extend-diff-ignore=^\\.cargo/config.toml$" "$PACKAGE_ROOT/debian/source/options"
+grep -Fx -- "--extend-diff-ignore=^\\.cargo/config$" "$PACKAGE_ROOT/debian/source/options"
+grep -F "true|metadata --locked --offline --format-version 1 --no-deps --features cosmic" "$CARGO_CAPTURE"
+grep -F "true|vendor --locked --offline vendor" "$CARGO_CAPTURE"
+
+printf 'test-ext-debian: changelog identity and pre-source vendoring passed\n'
