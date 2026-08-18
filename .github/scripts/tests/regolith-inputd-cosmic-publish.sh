@@ -14,7 +14,7 @@ unset CARGO_FEATURES
 source "$SETUP"
 test "${CARGO_FEATURES:-}" = cosmic
 
-grep -Fq '"ref": "3b3309a46c88289783dc7271557743f2e2586b57"' "$MODEL"
+grep -Fq '"ref": "ff5ae80c6c8ae2f8bcae44e63314c7fc18ef3687"' "$MODEL"
 grep -Fq '"source": "https://github.com/Rahul-2k4/regolith-inputd.git"' "$MODEL"
 
 printf '%s\n' 'regolith-inputd COSMIC packaging gate passed'
