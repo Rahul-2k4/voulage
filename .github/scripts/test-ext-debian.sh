@@ -106,6 +106,7 @@ prepare_source_package
 
 printf 'vendor.tar\n' > "$PACKAGE_ROOT/Makefile"
 
+test -d "$PACKAGE_ROOT/vendor"
 export CARGO="$MOCK_BIN/cargo"
 export CARGO_FEATURES=cosmic
 prepare_source_package
